@@ -80,7 +80,7 @@ const Register = () => {
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-3 w-full">
         <Input type="text" placeholder="Your Name" ref={nameRef} />
-        <Input type="email" placeholder="Email" ref={emailRef} />
+        <Input type="text" placeholder="Email" ref={emailRef} />
         <Input type="password" placeholder="Password" ref={passwordRef} />
         <Input
           type="password"
@@ -89,9 +89,7 @@ const Register = () => {
         />
 
         <div className="flex-center my-3">
-          <Button type="submit" className="">
-            Register
-          </Button>
+          <Button type="submit">Register</Button>
         </div>
       </form>
     </motion.div>
