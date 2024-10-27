@@ -4,20 +4,20 @@ import plugin from "tailwindcss/plugin";
 
 const config: Config = {
   content: [
-    "./layouts/**/*.{js,ts,jsx,tsx,mdx}",
-    "./pages/**/*.{js,ts,jsx,tsx,mdx}",
-    "./components/**/*.{js,ts,jsx,tsx,mdx}",
-    "./app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/layouts/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
     extend: {
-        colors: {
-          color: {
-            primary: "var(--primary)",
-            secondary: "var(--secondary)",
-            tertiary: "var(--tertiary)",
-          }
-        },
+      colors: {
+  			color: {
+  				primary: 'var(--color-primary)',
+  				secondary: 'var(--color-secondary)',
+  				tertiary: 'var(--color-tertiary)'
+  			}
+  		},
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":

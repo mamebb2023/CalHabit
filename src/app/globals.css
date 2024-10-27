@@ -2,9 +2,20 @@
 @tailwind components;
 @tailwind utilities;
 
-@import "@/styles/styles.css";
+@import "../styles/styles.css";
+
+@layer utilities {
+  .flex-center {
+    @apply flex justify-center items-center;
+  }
+  .bg-glass {
+    @apply bg-gradient-to-r from-white/30 via-white/20 to-white/10 backdrop-blur-lg;
+  }
+}
 
 :root {
-  --primary: #f5f5f5;
-  --secondary: #333;
+  --color-primary: hsl(45, 100%, 10%);
+  --color-primary-opacity: hsla(45, 100%, 10%, 0.6);
+  --color-secondary: hsl(40, 70%, 50%);
+  --color-tertiary: hsl(45, 100%, 90%);
 }
