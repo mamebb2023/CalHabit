@@ -5,7 +5,6 @@ import Input from "@/components/shared/Input";
 import Button from "@/components/shared/Button";
 import { Fleur_De_Leah } from "next/font/google";
 import { AnimatePresence, motion } from "framer-motion";
-// import { useToast } from "@/hooks/use-toast";
 import { validateEmail, validatePassword, validateName } from "@/lib/utils";
 
 const font = Fleur_De_Leah({
@@ -14,8 +13,6 @@ const font = Fleur_De_Leah({
 });
 
 const Register = () => {
-  // const { toast } = useToast();
-
   const nameRef = useRef<HTMLInputElement>(null);
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
@@ -31,28 +28,26 @@ const Register = () => {
     const confirmPassword = confirmPasswordRef.current?.value || "";
 
     if (!validateName(name)) {
-      setError(
-        "Please enter a valid username. It should be at least 3 characters long."
-      );
+      setError("Your name must be at least 2 characters long, right?");
       return;
     }
 
     if (!validateEmail(email)) {
-      setError("Please enter a valid email address (e.g., user@example.com).");
+      setError("Please enter a valid email address (e.g., user@example.com)");
       return;
     }
 
     if (!validatePassword(password)) {
-      setError(
-        "Your password must be at least 8 characters long and include a mix of letters, numbers, and symbols."
-      );
+      setError("Your password must be at least 8 characters long");
       return;
     }
 
     if (password !== confirmPassword) {
-      setError("The passwords do not match. Please try again.");
+      setError("Confirm your password");
       return;
     }
+
+    setError("");
 
     // Handle successful registration logic here
   };
@@ -76,7 +71,7 @@ const Register = () => {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 10 }}
             transition={{ duration: 0.2 }}
-            className="text-red-500 text-[.9em]"
+            className="text-red-500 text-[.8em]"
           >
             {error}
           </motion.p>
