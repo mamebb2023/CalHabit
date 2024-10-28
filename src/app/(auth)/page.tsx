@@ -1,10 +1,12 @@
 "use client";
 
-import Login from "@/components/Login";
-import Register from "@/components/Register";
 import { AnimatePresence } from "framer-motion";
 import React, { useState } from "react";
 import { motion } from "framer-motion";
+import dynamic from "next/dynamic";
+
+const Register = dynamic(() => import("@/components/Register"), { ssr: false });
+const Login = dynamic(() => import("@/components/Login"), { ssr: false });
 
 const Page = () => {
   const [register, setRegister] = useState(false);
@@ -22,7 +24,7 @@ const Page = () => {
         </AnimatePresence>
 
         <AnimatePresence mode="wait">
-          <motion.p
+          <motion.div
             key={register ? "register-text" : "login-text"}
             initial={{ opacity: 0 }}
             animate={{
@@ -40,7 +42,7 @@ const Page = () => {
             <span className="text-color-primary ml-1">
               {register ? "Login here" : "Register here"}
             </span>
-          </motion.p>
+          </motion.div>
         </AnimatePresence>
       </div>
     </div>

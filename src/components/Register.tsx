@@ -1,13 +1,14 @@
 "use client";
 
-import React, { useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Input from "@/components/shared/Input";
 import Button from "@/components/shared/Button";
 import { Fleur_De_Leah } from "next/font/google";
 import { AnimatePresence, motion } from "framer-motion";
 import { validateEmail, validatePassword, validateName } from "@/lib/utils";
 import { createUser } from "@/lib/actions/user.actions";
-import { useRouter } from "next/navigation";
+import { useToast } from "@/hooks/use-toast";
+import { LordIcon } from "./LordIcon/LordIcon";
 
 const font = Fleur_De_Leah({
   subsets: ["latin"],
@@ -15,20 +16,36 @@ const font = Fleur_De_Leah({
 });
 
 const Register = () => {
-  const router = useRouter();
-  const nameRef = useRef<HTMLInputElement>(null);
-  const emailRef = useRef<HTMLInputElement>(null);
-  const passwordRef = useRef<HTMLInputElement>(null);
-  const confirmPasswordRef = useRef<HTMLInputElement>(null);
+  const { toast } = useToast();
+
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+
   const [error, setError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
-  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  useEffect(() => {
+    setError(""); // Any initial state-setting for stable render
+
+    toast({
+      title: "Account Created",
+      description: (
+        <div className="flex items-center gap-3">
+          <LordIcon
+            src="https://cdn.lordicon.com/lomfljuq.json"
+            trigger="in"
+            size={28}
+          />
+          <p>Please login to continue</p>
+        </div>
+      ),
+    });
+  }, [toast]);
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    const name = nameRef.current?.value || "";
-    const email = emailRef.current?.value || "";
-    const password = passwordRef.current?.value || "";
-    const confirmPassword = confirmPasswordRef.current?.value || "";
 
     if (!validateName(name)) {
       setError("Your name must be at least 2 characters long, right?");
@@ -54,15 +71,21 @@ const Register = () => {
 
     // Handle successful registration logic here
     try {
-      await createUser({ name, email, password });
+      const data = JSON.parse(JSON.stringify({ name, email, password }));
+      await createUser(data);
 
-      router.push("/");
+      toast({
+        title: "Account created",
+        description: "Please login to continue",
+      });
+
+      window.location.reload();
     } catch (error) {
       console.log(error);
     } finally {
       // setIsSubmitting(false);
     }
-  }
+  };
 
   return (
     <motion.div
@@ -73,7 +96,7 @@ const Register = () => {
         duration: 0.4,
         ease: "easeInOut",
       }}
-      className="p-7 flex gap-5 flex-col w-[90%] lg:w-[400px] bg-glass rounded-3xl"
+      className="p-7 flex gap-3 flex-col w-[90%] lg:w-[400px] bg-glass rounded-3xl"
     >
       <h2 className={`h2 ${font.className}`}>Register</h2>
       <AnimatePresence mode="wait">
@@ -91,14 +114,40 @@ const Register = () => {
       </AnimatePresence>
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-3 w-full">
-        <Input type="text" placeholder="Your Name" ref={nameRef} />
-        <Input type="text" placeholder="Email" ref={emailRef} />
-        <Input type="password" placeholder="Password" ref={passwordRef} />
         <Input
-          type="password"
-          placeholder="Confirm Password"
-          ref={confirmPasswordRef}
+          type="text"
+          placeholder="Your Name"
+          onChange={(e) => setName(e.target.value)}
+          value={name}
         />
+        <Input
+          type="text"
+          placeholder="Email"
+          onChange={(e) => setEmail(e.target.value)}
+          value={email}
+        />
+        <Input
+          type={showPassword ? "text" : "password"}
+          placeholder="Password"
+          onChange={(e) => setPassword(e.target.value)}
+          value={password}
+        />
+        <Input
+          type={showPassword ? "text" : "password"}
+          placeholder="Confirm Password"
+          onChange={(e) => setConfirmPassword(e.target.value)}
+          value={confirmPassword}
+        />
+
+        <label className="flex items-center justify-end text-sm cursor-pointer">
+          <input
+            type="checkbox"
+            checked={showPassword}
+            onChange={() => setShowPassword(!showPassword)}
+            className="form-checkbox text-primary"
+          />
+          <span className="ml-2">Show Password</span>
+        </label>
 
         <div className="flex-center my-3">
           <Button type="submit">Register</Button>

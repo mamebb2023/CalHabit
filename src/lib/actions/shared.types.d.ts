@@ -5,5 +5,6 @@ export interface CreateUserParams {
 }
 
 export interface GetUserParams {
-  userId: string;
+  email: string;
+  password: string;
 }

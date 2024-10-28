@@ -49,7 +49,7 @@ const Login = () => {
       }}
       className="p-7 flex gap-5 flex-col w-[90%] lg:w-[400px] bg-glass rounded-3xl"
     >
-      <h3 className={`h3 ${font.className}`}>Login</h3>
+      <h2 className={`h2 ${font.className}`}>Login</h2>
       <AnimatePresence mode="wait">
         {error && (
           <motion.p
