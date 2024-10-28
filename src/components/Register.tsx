@@ -6,6 +6,8 @@ import Button from "@/components/shared/Button";
 import { Fleur_De_Leah } from "next/font/google";
 import { AnimatePresence, motion } from "framer-motion";
 import { validateEmail, validatePassword, validateName } from "@/lib/utils";
+import { createUser } from "@/lib/actions/user.actions";
+import { useRouter } from "next/navigation";
 
 const font = Fleur_De_Leah({
   subsets: ["latin"],
@@ -13,13 +15,14 @@ const font = Fleur_De_Leah({
 });
 
 const Register = () => {
+  const router = useRouter();
   const nameRef = useRef<HTMLInputElement>(null);
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
   const confirmPasswordRef = useRef<HTMLInputElement>(null);
   const [error, setError] = useState("");
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
     const name = nameRef.current?.value || "";
@@ -50,7 +53,16 @@ const Register = () => {
     setError("");
 
     // Handle successful registration logic here
-  };
+    try {
+      await createUser({ name, email, password });
+
+      router.push("/");
+    } catch (error) {
+      console.log(error);
+    } finally {
+      // setIsSubmitting(false);
+    }
+  }
 
   return (
     <motion.div
