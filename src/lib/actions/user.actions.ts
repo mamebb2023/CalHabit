@@ -9,20 +9,31 @@ export async function createUser(userData: CreateUserParams) {
     connectToDatabase();
 
     await User.create(userData);
-
-    return console.log("success");
   } catch (error) {
     console.log("er", error);
     throw error;
   }
 }
 
-export async function getUserById(params: GetUserParams) {
+export async function getUserByEmail(params: GetUserParams) {
   try {
-    connectToDatabase();
+    await connectToDatabase();
 
-    const { email } = params;
-    const user = await User.findOne({ email: email });
+    const { email, password } = params;
+    const userDocs = await User.findOne({ email });
+
+    if (!userDocs) {
+      return { error: "Email not found, Please Register" };
+    }
+
+    if (userDocs.password !== password) {
+      return { error: "Incorrect password" };
+    }
+
+    const user = userDocs.toObject();
+    user._id = user._id.toString();
+    delete user.password;
+    delete user.__v;
 
     return user;
   } catch (error) {

@@ -27,22 +27,8 @@ const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
-    setError(""); // Any initial state-setting for stable render
-
-    toast({
-      title: "Account Created",
-      description: (
-        <div className="flex items-center gap-3">
-          <LordIcon
-            src="https://cdn.lordicon.com/lomfljuq.json"
-            trigger="in"
-            size={28}
-          />
-          <p>Please login to continue</p>
-        </div>
-      ),
-    });
-  }, [toast]);
+    setError("");
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -75,11 +61,22 @@ const Register = () => {
       await createUser(data);
 
       toast({
-        title: "Account created",
-        description: "Please login to continue",
+        title: "Account Created",
+        description: (
+          <div className="flex items-center gap-3">
+            <LordIcon
+              src="https://cdn.lordicon.com/lomfljuq.json"
+              trigger="in"
+              size={28}
+            />
+            <p>Please login to continue</p>
+          </div>
+        ),
       });
 
-      window.location.reload();
+      setTimeout(() => {
+        window.location.href = "/";
+      }, 1000);
     } catch (error) {
       console.log(error);
     } finally {
@@ -139,14 +136,13 @@ const Register = () => {
           value={confirmPassword}
         />
 
-        <label className="flex items-center justify-end text-sm cursor-pointer">
+        <label className="flex items-center gap-1 justify-end text-sm cursor-pointer">
           <input
             type="checkbox"
             checked={showPassword}
             onChange={() => setShowPassword(!showPassword)}
-            className="form-checkbox text-primary"
           />
-          <span className="ml-2">Show Password</span>
+          <span>Show Password</span>
         </label>
 
         <div className="flex-center my-3">

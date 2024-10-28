@@ -5,7 +5,9 @@ import Input from "@/components/shared/Input";
 import Button from "@/components/shared/Button";
 import { Fleur_De_Leah } from "next/font/google";
 import { AnimatePresence, motion } from "framer-motion";
-import { validateEmail } from "@/lib/utils";
+import { validateEmail, validatePassword } from "@/lib/utils";
+import { getUserByEmail } from "@/lib/actions/user.actions";
+import { useToast } from "@/hooks/use-toast";
 
 const font = Fleur_De_Leah({
   subsets: ["latin"],
@@ -13,11 +15,14 @@ const font = Fleur_De_Leah({
 });
 
 const Login = () => {
+  const { toast } = useToast();
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
-  const [error, setError] = useState("");
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const [error, setError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const email = emailRef.current?.value || "";
@@ -28,7 +33,7 @@ const Login = () => {
       return;
     }
 
-    if (!validateEmail(password)) {
+    if (!validatePassword(password)) {
       setError("Password must be at least 8 characters long.");
       return;
     }
@@ -36,6 +41,23 @@ const Login = () => {
     setError("");
 
     // Handle successful login logic here
+    try {
+      const data = JSON.parse(JSON.stringify({ email, password }));
+      const user = await getUserByEmail(data);
+
+      if (user.error) {
+        setError(user.error);
+        return;
+      }
+
+      toast({
+        title: "Login successful",
+        description: `Welcome back, ${user.name}`,
+      });
+    } catch (error) {
+      console.log(error);
+      setError("An error occurred. Please try again later.");
+    }
   };
 
   return (
@@ -67,6 +89,16 @@ const Login = () => {
       <form onSubmit={handleSubmit} className="flex flex-col gap-3 w-full">
         <Input type="text" placeholder="Email" ref={emailRef} />
         <Input type="password" placeholder="Password" ref={passwordRef} />
+
+        <label className="flex items-center gap-1 justify-end text-sm cursor-pointer">
+          <input
+            type="checkbox"
+            checked={showPassword}
+            onChange={() => setShowPassword(!showPassword)}
+            className="form-checkbox text-primary"
+          />
+          <span>Show Password</span>
+        </label>
 
         <div className="flex-center my-3">
           <Button type="submit">Login</Button>
