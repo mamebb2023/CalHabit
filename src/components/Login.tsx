@@ -8,6 +8,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { validateEmail, validatePassword } from "@/lib/utils";
 import { getUserByEmail } from "@/lib/actions/user.actions";
 import { useToast } from "@/hooks/use-toast";
+import { useRouter } from "next/navigation";
 
 const font = Fleur_De_Leah({
   subsets: ["latin"],
@@ -15,6 +16,7 @@ const font = Fleur_De_Leah({
 });
 
 const Login = () => {
+  const router = useRouter();
   const { toast } = useToast();
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
@@ -54,6 +56,10 @@ const Login = () => {
         title: "Login successful",
         description: `Welcome back, ${user.name}`,
       });
+
+      setTimeout(() => {
+        router.push("/calendar");
+      }, 500);
     } catch (error) {
       console.log(error);
       setError("An error occurred. Please try again later.");
