@@ -21,3 +21,17 @@ export function validatePassword(password: string): boolean {
   const passwordRegex = /^.{8,20}$/;
   return passwordRegex.test(password);
 }
+
+export const getDaysForMonth = (year: number, month: number) => {
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+  const firstDay = new Date(year, month, 1).getDay();
+  const firstWeekday = firstDay === 0 ? 6 : firstDay - 1;
+
+  return Array.from({ length: firstWeekday })
+    .fill(null)
+    .concat(Array.from({ length: daysInMonth }, (_, i) => i + 1));
+};
+
+// export function getLastTwoDigits(string: string): string {
+//   // return string[:]
+// }

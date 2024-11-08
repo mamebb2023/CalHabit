@@ -1,5 +1,6 @@
 "use client";
 
+import { getDaysForMonth } from "@/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
 import { Fleur_De_Leah } from "next/font/google";
 import React, { useState } from "react";
@@ -36,22 +37,13 @@ const Page = () => {
   ];
   const weekDays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
-  const getDaysForMonth = (year: number, month: number) => {
-    const daysInMonth = new Date(year, month + 1, 0).getDate();
-    const firstDay = new Date(year, month, 1).getDay();
-    const firstWeekday = firstDay === 0 ? 6 : firstDay - 1;
-
-    return Array.from({ length: firstWeekday })
-      .fill(null)
-      .concat(Array.from({ length: daysInMonth }, (_, i) => i + 1));
-  };
-
   return (
     <div className="flex items-center justify-center p-5 flex-wrap gap-5">
       <div className="grid grid-cols-5 gap-5">
         <div className="w-full text-center text-2xl font-bold mb-5">
           <h1 className={`h1 ${font.className}`}>Calendar</h1>
-          {currentYear}
+          <p>{currentYear}</p>
+          <h3 className="h3">habit-name</h3>
         </div>
 
         {monthNames.map((monthName, monthIndex) => {
@@ -88,12 +80,17 @@ const Page = () => {
                     <div key={index} className="relative">
                       <AnimatePresence>
                         {isSelected && (
-                          <motion.div className="flex-center relative">
+                          <motion.div
+                            initial={{ y: 10, opacity: 0 }}
+                            animate={{ y: 0, opacity: 1 }}
+                            exit={{ y: 10, opacity: 0 }}
+                            className="flex-center relative"
+                          >
                             <div className="absolute bottom-0 p-1 bg-white border rounded-full flex-center gap-1">
-                              <div className="size-7 flex-center p-1 rounded-full text-[.8em] cursor-pointer bg-green-100">
+                              <div className="size-7 flex-center p-1 rounded-full text-[.8em] cursor-pointer bg-green-100 hover:bg-green-200 transition">
                                 <i className="bx bx-check" />
                               </div>
-                              <div className="size-7 flex-center p-1 rounded-full text-[.8em] cursor-pointer bg-red-100">
+                              <div className="size-7 flex-center p-1 rounded-full text-[.8em] cursor-pointer bg-red-100 hover:bg-red-200 transition">
                                 <i className="bx bx-x" />
                               </div>
                               {/* <div className="absolute -bottom-3">
