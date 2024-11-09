@@ -5,9 +5,9 @@ import Input from "@/components/shared/Input";
 import Button from "@/components/shared/Button";
 import { Fleur_De_Leah } from "next/font/google";
 import { AnimatePresence, motion } from "framer-motion";
-import { validateEmail, validatePassword } from "@/lib/utils";
-import { getUserByEmail } from "@/lib/actions/user.actions";
-import { useToast } from "@/hooks/use-toast";
+import { verifyToken, validateEmail, validatePassword } from "@/lib/utils";
+// import { getUserByEmail } from "@/lib/actions/user.actions";
+// import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
 
 const font = Fleur_De_Leah({
@@ -17,7 +17,7 @@ const font = Fleur_De_Leah({
 
 const Login = () => {
   const router = useRouter();
-  const { toast } = useToast();
+  // const { toast } = useToast();
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
 
@@ -44,25 +44,30 @@ const Login = () => {
 
     // Handle successful login logic here
     try {
-      const data = JSON.parse(JSON.stringify({ email, password }));
-      const user = await getUserByEmail(data);
-
-      if (user.error) {
-        setError(user.error);
-        return;
-      }
-
-      toast({
-        title: "Login successful",
-        description: `Welcome back, ${user.name}`,
+      const res = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
       });
 
-      setTimeout(() => {
-        router.push("/calendar");
-      }, 500);
-    } catch (error) {
-      console.log(error);
-      setError("An error occurred. Please try again later.");
+      const data = await res.json();
+
+      if (res.ok) {
+        // Store the token in localStorage or cookies (if you prefer)
+        localStorage.setItem("token", data.token); // Store JWT token in localStorage
+        const user = verifyToken();
+        console.log(user);
+
+        // Redirect user after successful login
+        router.push("/habits");
+      } else {
+        setError(data.message);
+      }
+    } catch (err) {
+      setError("An error occurred. Please try again.");
+      throw err;
     }
   };
 
@@ -94,7 +99,11 @@ const Login = () => {
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-3 w-full">
         <Input type="text" placeholder="Email" ref={emailRef} />
-        <Input type="password" placeholder="Password" ref={passwordRef} />
+        <Input
+          type={!showPassword ? "password" : "text"}
+          placeholder="Password"
+          ref={passwordRef}
+        />
 
         <label className="flex items-center gap-1 justify-end text-sm cursor-pointer">
           <input

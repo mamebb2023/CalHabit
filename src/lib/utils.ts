@@ -1,5 +1,7 @@
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
+import { jwtDecode } from "jwt-decode";  // Import jwt-decode
+
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -31,7 +33,28 @@ export const getDaysForMonth = (year: number, month: number) => {
     .fill(null)
     .concat(Array.from({ length: daysInMonth }, (_, i) => i + 1));
 };
+ 
+export function getLastTwoDigits(string: string): string {
+  return string.slice(-2);
+}
 
-// export function getLastTwoDigits(string: string): string {
-//   // return string[:]
-// }
+
+// Function to decode the token
+export function verifyToken() {
+  const token = localStorage.getItem("token");
+  console.log("Token found in localStorage:", token);
+
+  if (!token) {
+    console.log("No token found in localStorage");
+    return null;
+  }
+
+  try {
+    // Decode the token (no verification needed client-side)
+    const data = jwtDecode(token);  // Decoding the token
+    return data;  // Return the decoded token data
+  } catch (error) {
+    console.error("Token decoding failed:", error);
+    return null;
+  }
+}

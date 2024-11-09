@@ -1,8 +1,9 @@
 "use client";
 
-import { getDaysForMonth } from "@/lib/utils";
+import { getDaysForMonth, getLastTwoDigits } from "@/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
 import { Fleur_De_Leah } from "next/font/google";
+import Link from "next/link";
 import React, { useState } from "react";
 
 const font = Fleur_De_Leah({
@@ -47,13 +48,19 @@ const Page = () => {
       </div>
 
       <div>
-        <p className="font-bold">habit-name</p>
+        <Link
+          href={`/habits/calhabit`}
+          className="flex items-center justify-between m-1 p-1 px-3 hover:bg-gray-500/10 rounded-lg"
+        >
+          <p className="font-bold">habit-name</p>
+          <i className="bx bx-right-arrow-alt"></i>
+        </Link>
 
         <div className="w-[250px] border border-color-primary rounded-2xl p-3">
-          <div className="flex items-center justify-between border-b">
-            <p className="font-semibold mb-2">{monthNames[currentMonth]}</p>
+          <div className="flex items-center justify-between border-b border-color-secondary">
+            <p className="font-semibold">{monthNames[currentMonth]}</p>
             <p className="body-2">
-              {currentMonth}/{currentYear}
+              {currentMonth}/{getLastTwoDigits(`${currentYear}`)}
             </p>
           </div>
 
@@ -100,13 +107,13 @@ const Page = () => {
                     )}
                   </AnimatePresence>
                   <div
-                    className={`flex-center p-1 border rounded-lg cursor-pointer ${
+                    className={`flex-center p-1 border border-gray-500/30 rounded-lg  ${
                       day && day === today && currentMonth === currentMonth
-                        ? "bg-color-primary text-white"
+                        ? "bg-color-primary text-white cursor-pointer"
                         : isPastDate
                         ? "opacity-50 cursor-not-allowed"
-                        : "text-gray-800"
-                    } ${day ? "" : "invisible"}`}
+                        : "text-gray-800 cursor-pointer"
+                    } ${!day && "invisible"}`}
                     onClick={() =>
                       !isPastDate && day !== null
                         ? setSelectedDay(
@@ -127,8 +134,8 @@ const Page = () => {
         </div>
       </div>
 
-      <div className="flex-center border border-color-secondary rounded-full size-10">
-        <i className="bx bx-plus"></i>
+      <div className="flex-center text-color-secondary border border-color-secondary rounded-full size-10 cursor-pointer hover:bg-color-secondary transition hover:text-white">
+        <i className="bx bx-plus" />
       </div>
     </div>
   );
