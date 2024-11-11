@@ -86,7 +86,7 @@ const Register = () => {
         });
 
         setTimeout(() => {
-          router.push("/login");
+          // router.push("/login");
         }, 1000);
       } else {
         setError(data.message);
