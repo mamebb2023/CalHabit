@@ -1,5 +1,6 @@
 "use client";
 
+import { UserProvider } from "@/context/Context";
 import { verifyToken } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";
@@ -10,11 +11,16 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     const user = verifyToken();
 
-    if (user) {
-      router.push("/habits");
+    if (!user) {
+      router.push("/login");
     }
   });
-  return <div className="h-screen flex-center">{children}</div>;
+
+  return (
+    <UserProvider>
+      <div className="h-screen flex-center">{children}</div>
+    </UserProvider>
+  );
 };
 
 export default Layout;

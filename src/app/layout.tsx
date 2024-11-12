@@ -23,7 +23,9 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body className={`${font.className} text-color-primary antialiased`}>
+      <body
+        className={`${font.className} bg-color-tertiary text-color-primary antialiased`}
+      >
         {children}
         <Toaster />
       </body>
