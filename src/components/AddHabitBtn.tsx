@@ -13,7 +13,7 @@ const AddHabitBtn = ({ onClick }: Props) => {
       <div className="add-habit-circle flex-center text-color-secondary border border-color-secondary rounded-full size-10 transition m-3">
         <i className="bx bx-plus" />
       </div>
-      <p className="text-[.8em] text-gray-500/50 font-bold">Add Habit</p>
+      <p className={`text-[.8em] text-gray-500/50`}>Add Habit</p>
     </div>
   );
 };

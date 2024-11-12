@@ -2,16 +2,13 @@ import React from "react";
 import { motion } from "framer-motion";
 import { Fleur_De_Leah } from "next/font/google";
 
-const font = Fleur_De_Leah({
-  subsets: ["latin"],
-  weight: "400",
-});
-
 interface Props {
   onClose: () => void;
   onInputChange: (e: string) => void;
   handleAddHabit: () => void;
 }
+
+const font = Fleur_De_Leah({ subsets: ["latin"], weight: "400" });
 
 const AddHabit = ({ onClose, onInputChange, handleAddHabit }: Props) => {
   return (

@@ -3,13 +3,13 @@
 import React, { useRef, useState } from "react";
 import Input from "@/components/shared/Input";
 import Button from "@/components/shared/Button";
-import { Fleur_De_Leah } from "next/font/google";
 import { AnimatePresence, motion } from "framer-motion";
 import { validateEmail, validatePassword, validateName } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
 import { LordIcon } from "@/components/LordIcon/LordIcon";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { Fleur_De_Leah } from "next/font/google";
 
 const font = Fleur_De_Leah({
   subsets: ["latin"],

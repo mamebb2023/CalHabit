@@ -3,7 +3,6 @@
 import { useRouter } from "next/navigation";
 import React, { useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { Fleur_De_Leah } from "next/font/google";
 import Input from "@/components/shared/Input";
 import Button from "@/components/shared/Button";
 import { useToast } from "@/hooks/use-toast";
@@ -80,6 +79,7 @@ const Page = () => {
       throw err;
     }
   };
+
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.9 }}
