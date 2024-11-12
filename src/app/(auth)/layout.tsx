@@ -14,6 +14,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
       router.push("/habits");
     }
   });
+
   return <div className="h-screen flex-center">{children}</div>;
 };
 

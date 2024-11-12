@@ -18,7 +18,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <UserProvider>
-      <div className="h-screen flex-center">{children}</div>
+      <div className="h-screen">{children}</div>
     </UserProvider>
   );
 };

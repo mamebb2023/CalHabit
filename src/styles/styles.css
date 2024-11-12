@@ -1,3 +1,8 @@
-.bx { 
+.bx {
   font-size: 1.5em;
+}
+
+.add-habit-box:hover .add-habit-circle {
+  background-color: var(--color-secondary);
+  color: rgb(255 255 255);
 }
