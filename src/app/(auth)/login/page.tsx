@@ -6,8 +6,9 @@ import { AnimatePresence, motion } from "framer-motion";
 import Input from "@/components/shared/Input";
 import Button from "@/components/shared/Button";
 import { useToast } from "@/hooks/use-toast";
-import { validateEmail, validatePassword, verifyToken } from "@/lib/utils";
+import { getUserFromToken, validateEmail, validatePassword } from "@/lib/utils";
 import Link from "next/link";
+import { Fleur_De_Leah } from "next/font/google";
 
 const font = Fleur_De_Leah({
   subsets: ["latin"],
@@ -56,14 +57,13 @@ const Page = () => {
       if (res.ok) {
         // Store the token in localStorage or cookies (if you prefer)
         localStorage.setItem("token", data.token); // Store JWT token in localStorage
-        const user = verifyToken() as { name: string; email: string };
+
+        const user = getUserFromToken();
 
         if (!user) {
           setError("An error occurred. Please try again.");
           return;
         }
-
-        console.log(user);
 
         toast({
           title: "Login Successful",

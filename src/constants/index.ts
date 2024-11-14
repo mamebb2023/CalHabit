@@ -17,8 +17,9 @@ export const months = [
 
 export const habits = [
   {
-    userId: "userid",
-    habitName: "habitname1",
+    habit_id: "1",
+    user_id: "userid",
+    habit_name: "habitname1",
     dates: [
       {
         date: { year: 2024, month: 11, day: 4 },
@@ -39,8 +40,9 @@ export const habits = [
     ],
   },
   {
-    userId: "userid",
-    habitName: "habitname2",
+    habit_id: "2",
+    user_id: "userid",
+    habit_name: "habitname2",
     dates: [
       {
         date: { year: 2024, month: 11, day: 1 },
@@ -61,8 +63,9 @@ export const habits = [
     ],
   },
   {
-    userId: "userid",
-    habitName: "habitname3",
+    habit_id: "3",
+    user_id: "userid",
+    habit_name: "habitname3",
     dates: [
       {
         date: { year: 2024, month: 11, day: 5 },

@@ -50,3 +50,17 @@ export function verifyToken() {
     return null;
   }
 }
+
+type User = { _id: string; name: string; email: string };
+
+export function getUserFromToken(): User | null {
+  try {
+    const token = localStorage.getItem("token");
+    if (!token) return null;
+
+    return jwtDecode<User>(token);
+  } catch (error) {
+    console.error("Error retrieving or decoding token:", error);
+    return null;
+  }
+}

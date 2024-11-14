@@ -19,3 +19,20 @@
   --color-secondary: hsl(40, 70%, 50%);
   --color-tertiary: hsl(45, 100%, 90%);
 }
+
+::-webkit-scrollbar {
+  width: 7px;
+  background: transparent;
+  padding: 1px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(128, 128, 128, 0.3);
+  border: 2px solid transparent;
+  border-radius: 10px;
+  transition: all 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(128, 128, 128, 0.2);
+}

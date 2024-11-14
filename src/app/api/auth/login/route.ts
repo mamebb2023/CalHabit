@@ -43,14 +43,14 @@ export async function POST(req: NextRequest) {
   const token = jwt.sign(
     user.toJSON(), // User info
     JWT_SECRET,
-    { expiresIn: "1d" } // Token expiration time (1 day)
+    { expiresIn: "3d" } // Token expiration time (3 day)
   );
 
   // Set the token in a cookie (optional, for added security)
   const headers = new Headers();
   headers.set(
     "Set-Cookie",
-    `token=${token}; Path=/; HttpOnly; Max-Age=${60 * 60 * 24}; SameSite=Strict`
+    `token=${token}; Path=/; HttpOnly; Max-Age=${60 * 60 * 24 * 3}; SameSite=Strict`
   );
 
   // Respond with the token

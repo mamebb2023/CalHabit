@@ -1,6 +1,6 @@
 "use client";
 
-import { verifyToken } from "@/lib/utils";
+import { getUserFromToken } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";
 
@@ -8,7 +8,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
   const router = useRouter();
 
   useEffect(() => {
-    const user = verifyToken();
+    const user = getUserFromToken();
 
     if (user) {
       router.push("/habits");

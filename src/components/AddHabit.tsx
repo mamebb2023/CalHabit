@@ -5,12 +5,12 @@ import { Fleur_De_Leah } from "next/font/google";
 interface Props {
   onClose: () => void;
   onInputChange: (e: string) => void;
-  handleAddHabit: () => void;
+  handleCreateHabit: () => void;
 }
 
 const font = Fleur_De_Leah({ subsets: ["latin"], weight: "400" });
 
-const AddHabit = ({ onClose, onInputChange, handleAddHabit }: Props) => {
+const AddHabit = ({ onClose, onInputChange, handleCreateHabit }: Props) => {
   return (
     <motion.div
       initial={{ backdropFilter: "blur(0px)", opacity: 0 }}
@@ -41,7 +41,7 @@ const AddHabit = ({ onClose, onInputChange, handleAddHabit }: Props) => {
             />
             <button
               className="py-1 px-3 text-white rounded-lg bg-color-primary border border-color-primary hover:bg-transparent hover:text-color-primary transition"
-              onClick={handleAddHabit}
+              onClick={handleCreateHabit}
             >
               Add
             </button>

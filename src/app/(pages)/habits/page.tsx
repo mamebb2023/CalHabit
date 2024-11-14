@@ -2,12 +2,18 @@
 
 import AddHabit from "@/components/AddHabit";
 import AddHabitBtn from "@/components/AddHabitBtn";
-import { days, habits, months } from "@/constants";
-import { getDaysForMonth, getLastTwoDigits } from "@/lib/utils";
+import { days, months } from "@/constants";
+import { useToast } from "@/hooks/use-toast";
+import {
+  getDaysForMonth,
+  getLastTwoDigits,
+  getUserFromToken,
+} from "@/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
 import { Fleur_De_Leah } from "next/font/google";
 import Link from "next/link";
-import React, { useState } from "react";
+// import { useRouter } from "next/navigation";
+import React, { useEffect, useState } from "react";
 
 const font = Fleur_De_Leah({
   subsets: ["latin"],
@@ -15,11 +21,28 @@ const font = Fleur_De_Leah({
 });
 
 const Page = () => {
+  // const route = useRouter();
+  const { toast } = useToast();
+  const [habitName, setHabitName] = useState("");
+  const [habits, setHabits] = useState<
+    {
+      _id: string; // habit id
+      user_id: string;
+      habit_name: string;
+      dates: {
+        date: { year: number | null; month: number | null; day: number | null };
+        status: "done" | "undone";
+      }[];
+    }[]
+  >([]);
+
   const [addHabit, setAddHabit] = useState(false);
   const [selectedDay, setSelectedDay] = useState<{
+    month: number | null;
     habitIndex: number | null;
     day: number | null;
   }>({
+    month: null,
     habitIndex: null,
     day: null,
   });
@@ -30,14 +53,123 @@ const Page = () => {
   const currentYear = currentDate.getFullYear();
   const daysForMonth = getDaysForMonth(currentYear, currentMonth) as number[];
 
+  // Separate fetchHabits function to call it on demand
+  const fetchHabits = async () => {
+    const user = getUserFromToken();
+
+    if (!user) return;
+
+    try {
+      const response = await fetch(`/api/habits/get?user_id=${user._id}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setHabits(data.habits);
+      }
+    } catch (error) {
+      console.error("Error fetching habits", error);
+    }
+  };
+
+  // Fetch habits when the component mounts
+  useEffect(() => {
+    fetchHabits();
+  }, []);
+
+  const handleDayStatusUpdate = async ({
+    habit_id,
+    day,
+    month,
+    year,
+    status,
+  }: {
+    habit_id: string;
+    day: number;
+    month: number;
+    year: number;
+    status: "done" | "undone";
+  }) => {
+    const user = getUserFromToken();
+
+    if (!user) return null;
+
+    try {
+      const response = await fetch("/api/habits/update-day-status", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          user_id: user._id,
+          habit_id,
+          day,
+          month,
+          year,
+          status,
+        }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        toast({
+          title: data.message,
+        });
+
+        // Refresh habits list after successful update
+        fetchHabits();
+      }
+    } catch {
+      console.error("Error updating day status");
+    }
+  };
+
+  const handleCreateHabit = async () => {
+    const user = getUserFromToken();
+
+    if (!user) return null;
+
+    try {
+      const response = await fetch("/api/habits/create", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          user_id: user._id,
+          habit_name: habitName,
+        }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        toast({
+          title: data.message,
+        });
+
+        setAddHabit(false);
+
+        // Refresh habits list after creating a new habit
+        fetchHabits();
+      }
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  };
+
   return (
     <>
       <AnimatePresence>
         {addHabit && (
           <AddHabit
             onClose={() => setAddHabit(false)}
-            onInputChange={() => {}}
-            handleAddHabit={() => {}}
+            onInputChange={setHabitName}
+            handleCreateHabit={() => handleCreateHabit()}
           />
         )}
       </AnimatePresence>
@@ -55,10 +187,10 @@ const Page = () => {
             {habits.map((habit, habitIndex) => (
               <div key={habitIndex}>
                 <Link
-                  href={`/habits/${habit.habitName}`}
+                  href={`/habits/${habit._id}`}
                   className="flex items-center justify-between m-1 p-1 px-3 hover:bg-gray-500/10 rounded-lg transition"
                 >
-                  <p className="font-bold">{habit.habitName}</p>
+                  <p className="font-bold">{habit.habit_name}</p>
                   <i className="bx bx-right-arrow-alt"></i>
                 </Link>
 
@@ -108,9 +240,11 @@ const Page = () => {
                           onClick={() =>
                             day <= today &&
                             setSelectedDay((prev) =>
-                              prev.habitIndex === habitIndex && prev.day === day
-                                ? { habitIndex: null, day: null }
-                                : { habitIndex, day }
+                              prev.habitIndex === habitIndex &&
+                              prev.day === day &&
+                              prev.month === currentMonth
+                                ? { habitIndex: null, day: null, month: null }
+                                : { habitIndex, day, month: currentMonth }
                             )
                           }
                         >
@@ -121,21 +255,35 @@ const Page = () => {
                                   initial={{ y: 10, opacity: 0 }}
                                   animate={{ y: 0, opacity: 1 }}
                                   exit={{ y: 10, opacity: 0 }}
-                                  className="flex-center relative"
+                                  className="z-[3] absolute p-1 -top-6 bg-white border rounded-full flex-center gap-1 text-color-primary"
                                 >
-                                  <div className="z-[3] absolute bottom-0 p-1 bg-white border rounded-full flex-center gap-1 text-color-primary">
-                                    <div
-                                      className="size-5 flex-center p-1 rounded-full text-[.7em] cursor-pointer bg-green-100 hover:bg-green-200 transition"
-                                      // onClick={() => onClickDone}
-                                    >
-                                      <i className="bx bx-check" />
-                                    </div>
-                                    <div
-                                      className="size-5 flex-center p-1 rounded-full text-[.7em] cursor-pointer bg-red-100 hover:bg-red-200 transition"
-                                      // onClick={() => onClickUndone}
-                                    >
-                                      <i className="bx bx-x" />
-                                    </div>
+                                  <div
+                                    className="size-6 flex-center p-1 rounded-full text-[.7em] cursor-pointer bg-green-400 hover:bg-green-500 transition text-white"
+                                    onClick={() =>
+                                      handleDayStatusUpdate({
+                                        habit_id: habit._id,
+                                        day,
+                                        month: adjustedMonth,
+                                        year: currentYear,
+                                        status: "done",
+                                      })
+                                    }
+                                  >
+                                    <i className="bx bx-check" />
+                                  </div>
+                                  <div
+                                    className="size-6 flex-center p-1 rounded-full text-[.7em] cursor-pointer bg-red-400 hover:bg-red-500 transition text-white"
+                                    onClick={() =>
+                                      handleDayStatusUpdate({
+                                        habit_id: habit._id,
+                                        day,
+                                        month: adjustedMonth,
+                                        year: currentYear,
+                                        status: "undone",
+                                      })
+                                    }
+                                  >
+                                    <i className="bx bx-x" />
                                   </div>
                                 </motion.div>
                               )}
@@ -157,8 +305,8 @@ const Page = () => {
                             ) : day > today ? (
                               <i className="bx bx-lock opacity-70"></i>
                             ) : (
-                              <div className="flex-center p-[1px] text-white rounded-[50%] bg-gray-400">
-                                <i className="bx bx-history"></i>
+                              <div className="flex-center">
+                                {/* <i className="bx bx-history"></i> */}
                               </div>
                             )}
                           </div>
