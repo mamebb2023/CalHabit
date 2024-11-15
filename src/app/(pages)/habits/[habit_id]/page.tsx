@@ -1,5 +1,6 @@
 "use client";
 
+import Title from "@/components/Title";
 import { days, months } from "@/constants";
 import { useToast } from "@/hooks/use-toast";
 import {
@@ -8,11 +9,8 @@ import {
   getUserFromToken,
 } from "@/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
-import { Fleur_De_Leah } from "next/font/google";
 import { useParams, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
-
-const font = Fleur_De_Leah({ subsets: ["latin"], weight: "400" });
 
 const Page = () => {
   const route = useRouter();
@@ -25,46 +23,10 @@ const Page = () => {
     _id: string;
     habit_name: string;
     dates: {
-      date: { year: number; month: number; day: number };
-      status: string;
+      date: { year: number | null; month: number | null; day: number | null };
+      status: "done" | "undone";
     }[];
   } | null>(null);
-
-  // Fetch habits when the component mounts
-  useEffect(() => {
-    const fetchHabits = async () => {
-      const user = getUserFromToken();
-
-      if (!user) return;
-
-      try {
-        const response = await fetch(`/api/habits/get?user_id=${user._id}`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-
-        // if (response.ok) {
-        const data = await response.json();
-
-        console.log("data-1", data);
-
-        const habit = data.habits.find(
-          (h: { _id: string }) => h._id === habit_id
-        );
-
-        console.log("habit-2", habit);
-
-        setHabit(habit);
-        // }
-      } catch (error) {
-        console.error("Error fetching habits", error);
-      }
-    };
-    fetchHabits();
-  }, [habit_id]);
-  console.log("habit-1", habit);
 
   const [selectedDay, setSelectedDay] = useState<{
     month: number | null;
@@ -78,6 +40,14 @@ const Page = () => {
   const currentYear = currentDate.getFullYear();
   const today = currentDate.getDate();
   const currentMonth = currentDate.getMonth();
+
+  const [updateTrigger, setUpdateTrigger] = useState(false); // State to trigger updates
+
+  const [user, setUser] = useState<{
+    _id: string;
+    name: string;
+    email: string;
+  } | null>(null);
 
   const handleDayStatusUpdate = async ({
     day,
@@ -95,9 +65,6 @@ const Page = () => {
     if (!user) return null;
 
     try {
-      // fetch a post request to /api/habits/updateDayStatus
-      // with the habit_id, day, month, status
-
       const response = await fetch("/api/habits/update-day-status", {
         method: "POST",
         headers: {
@@ -120,19 +87,92 @@ const Page = () => {
           title: data.message,
         });
 
-        route.refresh();
+        setUpdateTrigger((prev) => !prev); // Toggle updateTrigger to refresh data
       }
     } catch {
       console.error("Error updating day status");
     }
   };
 
+  const handleDeleteHabit = async () => {
+    const user = getUserFromToken();
+
+    if (!user) return null;
+
+    try {
+      const response = await fetch("/api/habits/delete", {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          habit_id,
+        }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        toast({
+          title: data.message,
+        });
+
+        // setUpdateTrigger((prev) => !prev); // Trigger habit re-fetch
+        route.push("/habits");
+      }
+    } catch (error) {
+      console.error("Error deleting habit:", error);
+      toast({
+        title: "Error deleting habit",
+        description: "Something went wrong. Please try again.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  useEffect(() => {
+    const fetchHabitsAndSelectedHabit = async () => {
+      const user = getUserFromToken();
+      if (!user) return;
+
+      setUser(user);
+
+      try {
+        const response = await fetch(`/api/habits/get?user_id=${user._id}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+
+          if (habit_id) {
+            const selectedHabit = data.habits.find(
+              (h: { _id: string }) => h._id === habit_id
+            );
+            setHabit(selectedHabit || null);
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching habits", error);
+      }
+    };
+
+    fetchHabitsAndSelectedHabit();
+  }, [habit_id, updateTrigger]); // Re-fetch when habit_id or updateTrigger changes
+
   return (
-    <div className="flex items-center justify-center p-5 flex-wrap gap-5">
-      <div className="w-full font-bold mb-5">
-        <h1 className={`h1 ${font.className}`}>CalHabit</h1>
-        <h3 className="h3">{habit?.habit_name}</h3>
-      </div>
+    <div className="p-3 flex gap-3 flex-col">
+      <Title
+        title="CalHabit"
+        currentYear={currentYear}
+        name={user?.name}
+        email={user?.email}
+        habit_name={habit?.habit_name}
+        onDeleteHabit={handleDeleteHabit} // Pass the function directly
+      />
+
       <div className="grid grid-cols-5 gap-5">
         {months.map((month, monthIndex) => {
           const adjustedMonth = monthIndex + 1; // Adjust month for one-based comparison
@@ -147,7 +187,7 @@ const Page = () => {
               key={monthIndex}
               className="w-[250px] border border-color-primary rounded-2xl p-3"
             >
-              <div className="flex items-center justify-between border-b border-color-secondary">
+              <div className="relative flex items-center justify-between border-b border-color-secondary">
                 <p className="font-semibold">{month}</p>
                 <p className="body-2">
                   {monthIndex + 1}/{getLastTwoDigits(`${currentYear}`)}
@@ -164,7 +204,7 @@ const Page = () => {
 
               <div className="grid grid-cols-7 gap-1 text-center">
                 {daysForMonth.map((day, index) => {
-                  const habitDate = habit!.dates.find(
+                  const habitDate = habit?.dates.find(
                     (d) =>
                       d.date.year === currentYear &&
                       d.date.month === adjustedMonth &&

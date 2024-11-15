@@ -64,3 +64,7 @@ export function getUserFromToken(): User | null {
     return null;
   }
 }
+
+export function logout() {
+  localStorage.removeItem("token");
+}

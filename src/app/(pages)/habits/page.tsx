@@ -2,6 +2,7 @@
 
 import AddHabit from "@/components/AddHabit";
 import AddHabitBtn from "@/components/AddHabitBtn";
+import Title from "@/components/Title";
 import { days, months } from "@/constants";
 import { useToast } from "@/hooks/use-toast";
 import {
@@ -10,15 +11,8 @@ import {
   getUserFromToken,
 } from "@/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
-import { Fleur_De_Leah } from "next/font/google";
 import Link from "next/link";
-// import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
-
-const font = Fleur_De_Leah({
-  subsets: ["latin"],
-  weight: "400",
-});
 
 const Page = () => {
   // const route = useRouter();
@@ -35,6 +29,12 @@ const Page = () => {
       }[];
     }[]
   >([]);
+
+  const [user, setUser] = useState<{
+    _id: string;
+    name: string;
+    email: string;
+  } | null>(null);
 
   const [addHabit, setAddHabit] = useState(false);
   const [selectedDay, setSelectedDay] = useState<{
@@ -53,33 +53,7 @@ const Page = () => {
   const currentYear = currentDate.getFullYear();
   const daysForMonth = getDaysForMonth(currentYear, currentMonth) as number[];
 
-  // Separate fetchHabits function to call it on demand
-  const fetchHabits = async () => {
-    const user = getUserFromToken();
-
-    if (!user) return;
-
-    try {
-      const response = await fetch(`/api/habits/get?user_id=${user._id}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        setHabits(data.habits);
-      }
-    } catch (error) {
-      console.error("Error fetching habits", error);
-    }
-  };
-
-  // Fetch habits when the component mounts
-  useEffect(() => {
-    fetchHabits();
-  }, []);
+  const [updateTrigger, setUpdateTrigger] = useState(false);
 
   const handleDayStatusUpdate = async ({
     habit_id,
@@ -120,8 +94,7 @@ const Page = () => {
           title: data.message,
         });
 
-        // Refresh habits list after successful update
-        fetchHabits();
+        setUpdateTrigger((prev) => !prev); // Toggle updateTrigger to re-fetch habits
       }
     } catch {
       console.error("Error updating day status");
@@ -152,15 +125,42 @@ const Page = () => {
         });
 
         setAddHabit(false);
-
-        // Refresh habits list after creating a new habit
-        fetchHabits();
       }
     } catch (error) {
       console.error(error);
       throw error;
     }
   };
+
+  useEffect(() => {
+    const fetchUserAndHabits = async () => {
+      const loggedInUser = getUserFromToken();
+      if (!loggedInUser) return;
+
+      setUser(loggedInUser);
+
+      try {
+        const response = await fetch(
+          `/api/habits/get?user_id=${loggedInUser._id}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        if (response.ok) {
+          const data = await response.json();
+          setHabits(data.habits);
+        }
+      } catch (error) {
+        console.error("Error fetching habits", error);
+      }
+    };
+
+    fetchUserAndHabits();
+  }, [updateTrigger, addHabit]);
 
   return (
     <>
@@ -174,21 +174,21 @@ const Page = () => {
         )}
       </AnimatePresence>
 
-      <div className="flex flex-col p-5 flex-wrap gap-5 h-screen">
-        <div className="flex items-start justify-start">
-          <div className="flex flex-col items-end text-2xl font-bold mb-5">
-            <h1 className={`h1 ${font.className}`}>My Habits</h1>
-            <p>{currentYear}</p>
-          </div>
-        </div>
+      <div className="p-3 gap-5 h-screen">
+        <Title
+          title="CalHabit"
+          currentYear={currentYear}
+          name={user?.name}
+          email={user?.email}
+        />
 
         <div className="flex items-start justify-center flex-1">
-          <div className="flex-center gap-3">
+          <div className="flex-center flex-wrap gap-3 p-3">
             {habits.map((habit, habitIndex) => (
               <div key={habitIndex}>
                 <Link
                   href={`/habits/${habit._id}`}
-                  className="flex items-center justify-between m-1 p-1 px-3 hover:bg-gray-500/10 rounded-lg transition"
+                  className="flex-1 flex items-center justify-between m-1 p-1 px-3 hover:bg-gray-500/10 rounded-lg transition"
                 >
                   <p className="font-bold">{habit.habit_name}</p>
                   <i className="bx bx-right-arrow-alt"></i>

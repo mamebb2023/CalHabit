@@ -22,15 +22,15 @@ const AddHabit = ({ onClose, onInputChange, handleCreateHabit }: Props) => {
         initial={{ scale: 0.9, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         exit={{ scale: 0.9, opacity: 0 }}
-        className=""
+        className="flex items-start gap-3"
       >
-        <div className="flex justify-end">
-          <button className="bg-white p-1 rounded-t-xl" onClick={onClose}>
-            <i className="bx bx-x" />
-          </button>
-        </div>
-        <div className="bg-white p-3 rounded-s-xl rounded-b-xl">
-          <h2 className={`h2 ${font.className}`}>Add Habit</h2>
+        <div className="bg-white p-3 rounded-xl flex flex-col gap-3">
+          <div>
+            <h2 className={`h2 ${font.className}`}>Add Habit</h2>
+            <p className="text-[.8em] text-color-secondary">
+              Add a habit you want to track
+            </p>
+          </div>
 
           <div className="flex items-center justify-between">
             <input
@@ -47,6 +47,13 @@ const AddHabit = ({ onClose, onInputChange, handleCreateHabit }: Props) => {
             </button>
           </div>
         </div>
+
+        <button
+          className="bg-white p-1 rounded-xl flex-center"
+          onClick={onClose}
+        >
+          <i className="bx bx-x" />
+        </button>
       </motion.div>
     </motion.div>
   );
