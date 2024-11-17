@@ -98,17 +98,10 @@ const Register = () => {
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0, scale: 0.9 }}
-      animate={{ opacity: 1, scale: 1 }}
-      exit={{ opacity: 0, scale: 1.1 }}
-      transition={{
-        duration: 0.4,
-        ease: "easeInOut",
-      }}
-      className="p-7 flex gap-3 flex-col w-[90%] lg:w-[400px] bg-glass rounded-3xl"
-    >
-      <h2 className={`h2 ${font.className}`}>Register</h2>
+    <div className="p-7 flex gap-3 flex-col w-[90%] lg:w-[400px] bg-glass rounded-3xl">
+      <h1 className={`h1 text-[3em] leading-[3.5rem] ${font.className}`}>
+        Register
+      </h1>
       <AnimatePresence mode="wait">
         {error && (
           <motion.p
@@ -149,24 +142,12 @@ const Register = () => {
         <div className="flex-center my-3">
           <Button type="submit">Register</Button>
         </div>
-        <AnimatePresence mode="wait">
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{
-              opacity: 1,
-              transition: { opacity: { duration: 0.3, delay: 0.4 } },
-            }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.4 }}
-            className="w-full text-[.9em] ml-3 cursor-pointer hover:underline"
-          >
-            <Link href="/login" className="font-[300]">
-              Already have an account? Login here
-            </Link>
-          </motion.div>
-        </AnimatePresence>
+        <Link href="/login" className="text-[.9em] hover:underline font-[300]">
+          Already have an account?{" "}
+          <span className="font-normal">Login here</span>
+        </Link>
       </form>
-    </motion.div>
+    </div>
   );
 };
 

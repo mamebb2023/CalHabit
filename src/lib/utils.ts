@@ -1,6 +1,6 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { jwtDecode } from "jwt-decode"; // Import jwt-decode
+import { jwtDecode } from "jwt-decode";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -24,6 +24,7 @@ export function validatePassword(password: string): boolean {
 }
 
 export const getDaysForMonth = (year: number, month: number) => {
+  // Get the exact days for the month in that year
   const daysInMonth = new Date(year, month + 1, 0).getDate();
   const firstDay = new Date(year, month, 1).getDay();
   const firstWeekday = firstDay === 0 ? 6 : firstDay - 1;
@@ -34,26 +35,15 @@ export const getDaysForMonth = (year: number, month: number) => {
 };
 
 export function getLastTwoDigits(string: string): string {
+  // Return the last two digits of a string (e.g. 2024 -> 24)
   return string.slice(-2);
-}
-
-// Function to decode the token
-export function verifyToken() {
-  const token = localStorage.getItem("token");
-
-  if (!token) return null;
-
-  try {
-    return jwtDecode(token);
-  } catch (error) {
-    console.error("Token decoding failed:", error);
-    return null;
-  }
 }
 
 type User = { _id: string; name: string; email: string };
 
 export function getUserFromToken(): User | null {
+  // Function to decode a token form localhost and decode the user's info
+
   try {
     const token = localStorage.getItem("token");
     if (!token) return null;

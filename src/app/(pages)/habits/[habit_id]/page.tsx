@@ -173,7 +173,7 @@ const Page = () => {
         onDeleteHabit={handleDeleteHabit} // Pass the function directly
       />
 
-      <div className="grid grid-cols-5 gap-5">
+      <div className="flex-center flex-wrap gap-5">
         {months.map((month, monthIndex) => {
           const adjustedMonth = monthIndex + 1; // Adjust month for one-based comparison
 
@@ -185,7 +185,7 @@ const Page = () => {
           return (
             <div
               key={monthIndex}
-              className="w-[250px] border border-color-primary rounded-2xl p-3"
+              className="w-[300px] border border-color-primary rounded-2xl p-3"
             >
               <div className="relative flex items-center justify-between border-b border-color-secondary">
                 <p className="font-semibold">{month}</p>

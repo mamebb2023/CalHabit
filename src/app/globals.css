@@ -9,11 +9,12 @@
     @apply flex justify-center items-center;
   }
   .bg-glass {
-    @apply bg-gradient-to-r from-white/30 via-white/20 to-white/10 backdrop-blur-lg;
+    @apply bg-gradient-to-r from-white/40 via-white/30 to-white/20 backdrop-blur-lg;
   }
 }
 
 :root {
+  --background: white;
   --color-primary: hsl(45, 100%, 10%);
   --color-primary-opacity: hsla(45, 100%, 10%, 0.6);
   --color-secondary: hsl(40, 70%, 50%);
@@ -27,12 +28,12 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(128, 128, 128, 0.3);
+  background: rgba(128, 128, 128, 0.2);
   border: 2px solid transparent;
   border-radius: 10px;
   transition: all 0.3s ease;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(128, 128, 128, 0.2);
+  background: rgba(128, 128, 128, 0.3);
 }

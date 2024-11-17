@@ -26,7 +26,9 @@ const AddHabit = ({ onClose, onInputChange, handleCreateHabit }: Props) => {
       >
         <div className="bg-white p-3 rounded-xl flex flex-col gap-3">
           <div>
-            <h2 className={`h2 ${font.className}`}>Add Habit</h2>
+            <h1 className={`h1 text-[3em] leading-[3.5rem] ${font.className}`}>
+              Add Habit
+            </h1>
             <p className="text-[.8em] text-color-secondary">
               Add a habit you want to track
             </p>

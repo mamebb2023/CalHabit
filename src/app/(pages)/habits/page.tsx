@@ -92,9 +92,10 @@ const Page = () => {
         const data = await response.json();
         toast({
           title: data.message,
+          variant: "new",
         });
 
-        setUpdateTrigger((prev) => !prev); // Toggle updateTrigger to re-fetch habits
+        setUpdateTrigger((prev) => !prev);
       }
     } catch {
       console.error("Error updating day status");
@@ -107,6 +108,18 @@ const Page = () => {
     if (!user) return null;
 
     try {
+      // Trim whitespace from habitName
+      const trimmedHabitName = habitName.trim();
+
+      // Prevent creating a habit if the name is empty after trimming
+      if (!trimmedHabitName) {
+        toast({
+          title: "Habit name cannot be empty.",
+          variant: "destructive",
+        });
+        return;
+      }
+
       const response = await fetch("/api/habits/create", {
         method: "POST",
         headers: {
@@ -114,7 +127,7 @@ const Page = () => {
         },
         body: JSON.stringify({
           user_id: user._id,
-          habit_name: habitName,
+          habit_name: trimmedHabitName,
         }),
       });
 
@@ -182,7 +195,7 @@ const Page = () => {
           email={user?.email}
         />
 
-        <div className="flex items-start justify-center flex-1">
+        <div className="flex-center flex-col flex-1">
           <div className="flex-center flex-wrap gap-3 p-3">
             {habits.map((habit, habitIndex) => (
               <div key={habitIndex}>
@@ -194,7 +207,7 @@ const Page = () => {
                   <i className="bx bx-right-arrow-alt"></i>
                 </Link>
 
-                <div className="w-[250px] border border-color-primary rounded-2xl p-3">
+                <div className="w-[300px] border border-color-primary rounded-2xl p-3">
                   <div className="flex items-center justify-between border-b border-color-secondary">
                     <p className="font-semibold">{months[currentMonth]}</p>
                     <p className="body-2">
@@ -317,6 +330,8 @@ const Page = () => {
                 </div>
               </div>
             ))}
+          </div>
+          <div className="flex-center py-5">
             <AddHabitBtn onClick={() => setAddHabit(true)} />
           </div>
         </div>
