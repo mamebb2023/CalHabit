@@ -6,7 +6,6 @@ import Button from "@/components/shared/Button";
 import { AnimatePresence, motion } from "framer-motion";
 import { validateEmail, validatePassword, validateName } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
-import { LordIcon } from "@/components/LordIcon/LordIcon";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Fleur_De_Leah } from "next/font/google";
@@ -73,16 +72,7 @@ const Register = () => {
       if (res.ok) {
         toast({
           title: "Account Created",
-          description: (
-            <div className="flex items-center gap-3">
-              <LordIcon
-                src="https://cdn.lordicon.com/lomfljuq.json"
-                trigger="in"
-                size={28}
-              />
-              <p>Please login to continue</p>
-            </div>
-          ),
+          description: "Please login to continue.",
         });
 
         setTimeout(() => {
