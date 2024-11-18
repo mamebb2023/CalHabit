@@ -92,7 +92,7 @@ const Page = () => {
         const data = await response.json();
         toast({
           title: data.message,
-          variant: "new",
+          description: `Day ${day} status updated to ${status}.`,
         });
 
         setUpdateTrigger((prev) => !prev);
