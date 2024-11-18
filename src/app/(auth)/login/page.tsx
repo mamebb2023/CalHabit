@@ -24,20 +24,18 @@ const Page = () => {
   const [error, setError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const email = emailRef.current?.value || "";
     const password = passwordRef.current?.value || "";
 
     if (!validateEmail(email)) {
-      setError("Please enter a valid email address");
-      return;
+      return setError("Please enter a valid email address");
     }
 
     if (!validatePassword(password)) {
-      setError("Password must be at least 8 characters long.");
-      return;
+      return setError("Password must be at least 8 characters long.");
     }
 
     setError("");
@@ -59,15 +57,15 @@ const Page = () => {
         localStorage.setItem("token", data.token); // Store JWT token in localStorage
 
         const user = getUserFromToken();
-
         if (!user) {
-          setError("An error occurred. Please try again.");
-          return;
+          return setError("An error occurred. Please try again.");
         }
+
+        console.log("user", user);
 
         toast({
           title: "Login Successful",
-          description: `You have successfully logged in. Welcome back, ${user.name}, ${user.email}!`,
+          description: `Welcome! ${user.name}!`,
         });
 
         router.push("/habits");
@@ -98,7 +96,7 @@ const Page = () => {
         )}
       </AnimatePresence>
 
-      <form onSubmit={handleSubmit} className="flex flex-col gap-3 w-full">
+      <form onSubmit={handleLogin} className="flex flex-col gap-3 w-full">
         <Input type="text" placeholder="Email" ref={emailRef} />
         <Input
           type={!showPassword ? "password" : "text"}

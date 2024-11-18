@@ -9,12 +9,12 @@ interface DateEntry {
     month: number;
     day: number;
   };
-  status: string;
+  status: "done" | "undone";
 }
 
 interface HabitDocument {
-  _id: string;
   user_id: string;
+  habit_name: string;
   dates: DateEntry[];
 }
 
@@ -32,11 +32,22 @@ export async function POST(req: NextRequest) {
   // Find the habit
   const habit = await Habit.findOne({ user_id, _id: habit_id });
   if (!habit) {
+    console.log("Habit not found!");
     return NextResponse.json({ message: "Habit not found!" }, { status: 404 });
   }
 
+  // Check if the status is valid
+  if (!["done", "undone"].includes(status)) {
+    return NextResponse.json(
+      { message: "Invalid status. Must be 'done' or 'undone'." },
+      { status: 400 }
+    );
+  }
+
   // Check if the date entry exists and if the status matches
-  const existingDate: DateEntry | undefined = (habit as HabitDocument).dates.find(
+  const existingDate: DateEntry | undefined = (
+    habit as HabitDocument
+  ).dates.find(
     (entry: DateEntry) =>
       entry.date.year === year &&
       entry.date.month === month &&
@@ -50,7 +61,7 @@ export async function POST(req: NextRequest) {
 
   // Attempt to update an existing date entry
   const result = await Habit.updateOne(
-    { _id: habit_id, user_id },
+    { _id: habit_id, user_id: user_id },
     {
       $set: {
         "dates.$[elem].status": status,
@@ -70,7 +81,7 @@ export async function POST(req: NextRequest) {
   // If no document was updated, push a new date entry
   if (result.modifiedCount === 0) {
     await Habit.updateOne(
-      { _id: habit_id, user_id },
+      { _id: habit_id, user_id: user_id },
       {
         $push: {
           dates: { date: { year, month, day }, status },
