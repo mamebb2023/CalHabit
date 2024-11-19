@@ -187,7 +187,7 @@ const Page = () => {
         )}
       </AnimatePresence>
 
-      <div className="p-3 gap-5 h-screen">
+      <div className="p-3 h-screen">
         <Title
           title="CalHabit"
           currentYear={currentYear}
@@ -195,7 +195,7 @@ const Page = () => {
           email={user?.email}
         />
 
-        <div className="flex-center flex-col flex-1">
+        <div className="flex-center flex-col flex-1 bg-glass rounded-lg mt-4">
           <div className="flex-center flex-wrap gap-3 p-3">
             {habits.map((habit, habitIndex) => (
               <div key={habitIndex}>

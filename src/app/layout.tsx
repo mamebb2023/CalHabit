@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Lexend } from "next/font/google";
 import { Toaster } from "@/components/ui/toaster";
+import Background from "@/components/Background";
 
 const font = Lexend({ subsets: ["latin"] });
 
@@ -23,10 +24,8 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body
-        className={`${font.className} bg-color-tertiary text-color-primary antialiased`}
-      >
-        {children}
+      <body className={`${font.className} text-color-primary antialiased`}>
+        <Background>{children}</Background>
         <Toaster />
       </body>
     </html>

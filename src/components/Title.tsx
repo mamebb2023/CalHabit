@@ -34,7 +34,7 @@ const Title = ({
   const [logoutPrompt, setLogoutPrompt] = useState(false);
 
   return (
-    <div className="flex flex-col md:flex-row md:items-start gap-5 md:gap-10 p-3 bg-glass">
+    <div className="flex flex-col md:flex-row md:items-start gap-5 md:gap-10 p-3 bg-glass rounded-lg">
       <div className="flex justify-between md:justify-center items-center md:flex-col gap-2 text-2xl px-3">
         <h1 className={`h1 text-[2.5em] leading-[4.5rem] ${font.className}`}>
           {title}

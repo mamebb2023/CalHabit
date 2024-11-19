@@ -39,7 +39,7 @@ export function getLastTwoDigits(string: string): string {
   return string.slice(-2);
 }
 
-type User = { _id: string; name: string; email: string };
+export type User = { _id: string; name: string; email: string };
 
 export function getUserFromToken(): User | null {
   // Function to decode a token form localhost and decode the user's info

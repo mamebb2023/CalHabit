@@ -14,11 +14,11 @@
 }
 
 :root {
-  --background: white;
-  --color-primary: hsl(45, 100%, 10%);
-  --color-primary-opacity: hsla(45, 100%, 10%, 0.6);
-  --color-secondary: hsl(40, 70%, 50%);
-  --color-tertiary: hsl(45, 100%, 90%);
+  --color-primary: #5a3e1a;
+  --color-secondary: #d8a732;
+  --color-tertiary: #fffbe9;
+
+  --color-primary-opacity: #33260099;
 }
 
 ::-webkit-scrollbar {
