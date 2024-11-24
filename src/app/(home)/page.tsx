@@ -61,12 +61,21 @@ const Page = () => {
 
       <div className="flex-1 p-3 flex flex-col justify-between rounded-xl bg-glass">
         <div className="flex-1 flex items-center justify-end">
-          <div className="w-[90%] md:w-[60%] lg:w-[50%] px-3 md:px-7 lg:px-10">
+          <div className="flex flex-col gap-3 items-end w-[90%] md:w-[60%] lg:w-[50%] px-3 md:px-7 lg:px-10">
             <p>
               CalHabit is a habit tracker that helps you keep track of your
               habits. You can create habits. It&apos;s a simple way to stay on
-              top of your goals and build healthy habits
+              top of your goals and build healthy habits.
             </p>
+            {user ? (
+              <Button className="rounded-xl px-3 py-2">
+                <Link href="/habits">My Habits</Link>
+              </Button>
+            ) : (
+              <Button className="rounded-xl px-3 py-2">
+                <Link href="/register">Get Started</Link>
+              </Button>
+            )}
           </div>
         </div>
         <h1

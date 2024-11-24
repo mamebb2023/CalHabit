@@ -7,67 +7,81 @@
   color: rgb(255 255 255);
 }
 
-.bg {
-  background: radial-gradient(circle, var(--color-secondary), var(--color-tertiary));
-  background-size: 150% 150%;
-  animation: circular-gradient 50s linear infinite;
+:root {
+  --diameter: 35vmax;
 }
 
-@keyframes circular-gradient {
+.aurora {
+  position: relative;
+  overflow: hidden;
+}
+
+.aurora::before,
+.aurora::after {
+  content: "";
+  display: block;
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  border-radius: 50%;
+  opacity: 0.5;
+}
+
+.aurora::before {
+  box-shadow: 0 0 var(--diameter) var(--diameter) var(--color-secondary);
+  animation: hue 5s linear infinite, move1 10s linear infinite;
+}
+
+.aurora::after {
+  box-shadow: 0 0 var(--diameter) var(--diameter) var(--color-tertiary);
+  animation: hue 10s linear infinite, move2 20s linear infinite;
+}
+
+/* @keyframes hue {
   0% {
-    background-position: 10% 10%; /* Top-left */
-  }
-  10% {
-    background-position: 50% 0%; /* Top-center */
-  }
-  20% {
-    background-position: 90% 10%; /* Top-right */
-  }
-  30% {
-    background-position: 100% 50%; /* Right-center */
-  }
-  40% {
-    background-position: 90% 90%; /* Bottom-right */
-  }
-  50% {
-    background-position: 50% 100%; /* Bottom-center */
-  }
-  60% {
-    background-position: 10% 90%; /* Bottom-left */
-  }
-  70% {
-    background-position: 0% 50%; /* Left-center */
-  }
-  80% {
-    background-position: 10% 10%; /* Back near start */
-  }
-  90% {
-    background-position: 50% 0%; /* Top-center */
+    filter: hue-rotate(0deg);
   }
   100% {
-    background-position: 10% 10%; /* Back to start */
+    filter: hue-rotate(360deg);
+  }
+} */
+
+@keyframes move1 {
+  0% {
+    top: 0vh;
+    left: 50vw;
+  }
+  25% {
+    left: 0vw;
+  }
+  50% {
+    top: 100vh;
+  }
+  75% {
+    left: 100vw;
+  }
+  100% {
+    top: 0vh;
+    left: 50vw;
   }
 }
 
-
-.wave {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  overflow: hidden;
-  line-height: 0;
-  transform: rotate(180deg);
- 
-}
-
-.wave svg {
-  position: relative;
-  display: block;
-  width: calc(100% + 1.3px);
-  height: 212px;
-}
-
-.wave .shape-fill {
-  fill: #ffffff;
+@keyframes move2 {
+  0% {
+    top: 50vh;
+    left: 100vw;
+  }
+  25% {
+    top: 100vh;
+  }
+  50% {
+    left: 0vw;
+  }
+  75% {
+    top: 0vh;
+  }
+  100% {
+    top: 50vh;
+    left: 100vw;
+  }
 }
