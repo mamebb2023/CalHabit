@@ -34,7 +34,7 @@ const Title = ({
   const [logoutPrompt, setLogoutPrompt] = useState(false);
 
   return (
-    <div className="flex flex-col md:flex-row md:items-start gap-5 md:gap-10 p-3 bg-glass rounded-lg">
+    <div className="z-10 flex flex-col md:flex-row md:items-start gap-5 md:gap-10 p-3 bg-glass rounded-lg">
       <div className="flex justify-between md:justify-center items-center md:flex-col gap-2 text-2xl px-3">
         <Link
           href="/"
@@ -70,7 +70,7 @@ const Title = ({
 
         <div className="flex-center gap-3">
           {habit_name && (
-            <div>
+            <>
               <div
                 className="relative hover:bg-gray-500/10 p-2 rounded-lg border border-color-primary hover:border-transparent cursor-pointer flex-center transition"
                 onClick={() => setDeleteHabitPrompt(!deleteHabitPrompt)}
@@ -86,12 +86,12 @@ const Title = ({
                   />
                 )}
               </AnimatePresence>
-            </div>
+            </>
           )}
 
-          <div>
+          <>
             <div
-              className="relative hover:bg-gray-500/10 p-2 rounded-lg cursor-pointer flex-center transition"
+              className="hover:bg-gray-500/10 p-2 rounded-lg cursor-pointer flex-center transition"
               onClick={() => setLogoutPrompt(!logoutPrompt)}
             >
               <i className="bx bx-log-out" />
@@ -108,7 +108,7 @@ const Title = ({
                 />
               )}
             </AnimatePresence>
-          </div>
+          </>
         </div>
       </div>
 

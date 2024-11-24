@@ -14,7 +14,7 @@ const AreYouSurePrompt = ({ title, onClose, onDelete }: Props) => {
       initial={{ y: -10, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       exit={{ y: -10, opacity: 0 }}
-      className="scale-90 z-10 absolute right-0 bg-white rounded-xl p-3 flex-center flex-col gap-2"
+      className="scale-90 absolute right-0 bg-white rounded-xl p-3 flex-center flex-col gap-2"
     >
       <p className="font-semibold text-center">{title}</p>
       <div className="flex items-center gap-2">

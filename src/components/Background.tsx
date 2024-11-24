@@ -4,9 +4,9 @@ import React from "react";
 
 const Background = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div className="aurora relative min-h-screen">
-      {/* Content */}
-      <div className="z-10 relative">{children}</div>
+    // remove - from aurora- to change background
+    <div className="aurora- bg-gradient-to-tr from-color-secondary to-white">
+      {children}
     </div>
   );
 };

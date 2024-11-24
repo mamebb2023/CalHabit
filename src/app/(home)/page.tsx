@@ -38,7 +38,7 @@ const Page = () => {
               </Button>
             </>
           ) : (
-            <div>
+            <>
               <div
                 className="relative hover:bg-gray-500/10 p-2 rounded-lg cursor-pointer flex-center transition"
                 onClick={() => setLogoutPrompt(!logoutPrompt)}
@@ -54,7 +54,7 @@ const Page = () => {
                   />
                 )}
               </AnimatePresence>
-            </div>
+            </>
           )}
         </div>
       </div>
