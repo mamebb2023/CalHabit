@@ -12,6 +12,9 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      backgroundImage: {
+        'custom-radial': 'radial-gradient(circle at bottom center, var(--tw-gradient-from), var(--tw-gradient-to))',
+      },
       colors: {
         color: {
           primary: "var(--color-primary)",
@@ -54,7 +57,6 @@ const config: Config = {
         },
       });
     }),
-    require("tailwindcss-animate"),
   ],
 };
 export default config;
