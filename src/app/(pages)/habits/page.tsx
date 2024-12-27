@@ -195,7 +195,7 @@ const Page = () => {
           email={user?.email}
         />
 
-        <div className="flex-center flex-col flex-1 bg-glass rounded-lg mt-4">
+        <div className="flex-center flex-col flex-1 bg-glass-gradient rounded-lg mt-4">
           <div className="flex-center flex-wrap gap-3 p-3">
             {habits.map((habit, habitIndex) => (
               <div key={habitIndex}>

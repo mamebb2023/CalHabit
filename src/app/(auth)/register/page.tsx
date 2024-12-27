@@ -88,7 +88,7 @@ const Register = () => {
   };
 
   return (
-    <div className="p-7 flex gap-3 flex-col w-[90%] lg:w-[400px] bg-glass rounded-3xl">
+    <div className="p-7 flex gap-3 flex-col w-[90%] lg:w-[400px] bg-glass-gradient rounded-3xl">
       <h1 className={`h1 text-[3em] leading-[3.5rem] ${font.className}`}>
         Register
       </h1>

@@ -18,13 +18,12 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
   }, [router]);
 
   return (
-    <AnimatePresence mode="wait">
+    <AnimatePresence>
       {children && (
         <motion.div
           key={pathname} // Use pathname as a unique key
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
-          exit={{ opacity: 0, scale: 0.95 }}
         >
           {children}
         </motion.div>

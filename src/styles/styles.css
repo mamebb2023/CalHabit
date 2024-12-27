@@ -2,86 +2,34 @@
   font-size: 1.5em;
 }
 
-.add-habit-box:hover .add-habit-circle {
-  background-color: var(--color-secondary);
-  color: rgb(255 255 255);
+.rotate-360 {
+  animation: rotate-360 infinite 7s linear;
+  -moz-animation: rotate-360 infinite 7s linear;
+  -webkit-animation: rotate-360 infinite 7s linear;
+  -o-animation: rotate-360 infinite 7s linear;
 }
 
-:root {
-  --diameter: 35vmax;
-}
-
-.aurora {
-  position: relative;
-  overflow: hidden;
-}
-
-.aurora::before,
-.aurora::after {
-  content: "";
-  display: block;
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  border-radius: 50%;
-  opacity: 0.5;
-}
-
-.aurora::before {
-  box-shadow: 0 0 var(--diameter) var(--diameter) var(--color-secondary);
-  animation: hue 5s linear infinite, move1 10s linear infinite;
-}
-
-.aurora::after {
-  box-shadow: 0 0 var(--diameter) var(--diameter) var(--color-tertiary);
-  animation: hue 10s linear infinite, move2 20s linear infinite;
-}
-
-/* @keyframes hue {
-  0% {
-    filter: hue-rotate(0deg);
+@keyframes rotate-360 {
+  from {
+    transform: rotate(0deg);
   }
-  100% {
-    filter: hue-rotate(360deg);
-  }
-} */
-
-@keyframes move1 {
-  0% {
-    top: 0vh;
-    left: 50vw;
-  }
-  25% {
-    left: 0vw;
-  }
-  50% {
-    top: 100vh;
-  }
-  75% {
-    left: 100vw;
-  }
-  100% {
-    top: 0vh;
-    left: 50vw;
+  to {
+    transform: rotate(360deg);
   }
 }
 
-@keyframes move2 {
-  0% {
-    top: 50vh;
-    left: 100vw;
+.rotate-circle {
+  animation: rotate-circle infinite 70s linear;
+  -moz-animation: rotate-circle infinite 70s linear;
+  -webkit-animation: rotate-circle infinite 70s linear;
+  -o-animation: rotate-circle infinite 70s linear;
+} 
+
+@keyframes rotate-circle {
+  from {
+    transform: rotate(0deg);
   }
-  25% {
-    top: 100vh;
-  }
-  50% {
-    left: 0vw;
-  }
-  75% {
-    top: 0vh;
-  }
-  100% {
-    top: 50vh;
-    left: 100vw;
+  to {
+    transform: rotate(360deg);
   }
 }

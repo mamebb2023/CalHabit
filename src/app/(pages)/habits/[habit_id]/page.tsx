@@ -173,7 +173,7 @@ const Page = () => {
         onDeleteHabit={handleDeleteHabit} // Pass the function directly
       />
 
-      <div className="flex-center flex-wrap gap-5 bg-glass rounded-lg p-5">
+      <div className="flex-center flex-wrap gap-5 bg-glass-gradient rounded-lg p-5">
         {months.map((month, monthIndex) => {
           const adjustedMonth = monthIndex + 1; // Adjust month for one-based comparison
 

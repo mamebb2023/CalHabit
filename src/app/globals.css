@@ -9,14 +9,17 @@
     @apply flex justify-center items-center;
   }
   .bg-glass {
+    @apply bg-white/40 backdrop-blur-lg;
+  }
+  .bg-glass-gradient {
     @apply bg-gradient-to-r from-white/40 via-white/30 to-white/20 backdrop-blur-lg;
   }
 }
 
 :root {
-  --color-primary: #5a3e1a;
-  --color-secondary: #d8a732;
-  --color-tertiary: #fffbe9;
+  --color-primary: hsl(34, 100%, 10%);
+  --color-secondary: #cb7f1b;
+  --color-tertiary: #fff2b8;
 
   --color-primary-opacity: #33260099;
 }

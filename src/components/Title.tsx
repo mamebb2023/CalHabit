@@ -34,7 +34,7 @@ const Title = ({
   const [logoutPrompt, setLogoutPrompt] = useState(false);
 
   return (
-    <div className="z-10 flex flex-col md:flex-row md:items-start gap-5 md:gap-10 p-3 bg-glass rounded-lg">
+    <div className="z-10 flex flex-col md:flex-row md:items-start gap-5 md:gap-10 p-3 bg-glass-gradient rounded-lg">
       <div className="flex justify-between md:justify-center items-center md:flex-col gap-2 text-2xl px-3">
         <Link
           href="/"
@@ -45,7 +45,7 @@ const Title = ({
         <p className="font-bold">{currentYear}</p>
       </div>
 
-      <div className="flex-1 flex items-center justify-between bg-glass p-3 rounded-lg">
+      <div className="flex-1 flex items-center justify-between bg-glass-gradient p-3 rounded-lg">
         <div className="flex-center gap-2">
           {habit_name && (
             <Link
