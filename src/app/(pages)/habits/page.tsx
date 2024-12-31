@@ -211,7 +211,7 @@ const Page = () => {
                   <div className="flex items-center justify-between border-b border-color-secondary">
                     <p className="font-semibold">{months[currentMonth]}</p>
                     <p className="body-2">
-                      {currentMonth}/{getLastTwoDigits(`${currentYear}`)}
+                      {currentMonth + 1}/{getLastTwoDigits(`${currentYear}`)}
                     </p>
                   </div>
 
