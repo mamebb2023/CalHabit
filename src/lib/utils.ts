@@ -57,4 +57,5 @@ export function getUserFromToken(): User | null {
 
 export function logout() {
   localStorage.removeItem("token");
+  sessionStorage.removeItem("habits");
 }

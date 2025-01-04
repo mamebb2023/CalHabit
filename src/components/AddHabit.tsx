@@ -13,10 +13,10 @@ const font = Fleur_De_Leah({ subsets: ["latin"], weight: "400" });
 const AddHabit = ({ onClose, onInputChange, handleCreateHabit }: Props) => {
   return (
     <motion.div
-      initial={{ backdropFilter: "blur(0px)", opacity: 0 }}
-      animate={{ backdropFilter: "blur(5px)", opacity: 1 }}
-      exit={{ backdropFilter: "blur(0px)", opacity: 0 }}
-      className="z-[2] fixed top-0 left-0 w-full h-full bg-black/50 flex-center"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="z-[20] absolute top-0 left-0 w-full h-full bg-black/50 backdrop-blur-sm flex-center rounded-lg"
     >
       <motion.div
         initial={{ scale: 0.9, opacity: 0 }}
@@ -34,7 +34,10 @@ const AddHabit = ({ onClose, onInputChange, handleCreateHabit }: Props) => {
             </p>
           </div>
 
-          <div className="flex items-center justify-between">
+          <form
+            onSubmit={handleCreateHabit}
+            className="flex items-center justify-between"
+          >
             <input
               type="text"
               placeholder="Habit name"
@@ -42,12 +45,12 @@ const AddHabit = ({ onClose, onInputChange, handleCreateHabit }: Props) => {
               onChange={(e) => onInputChange(e.target.value)}
             />
             <button
+              type="submit"
               className="py-1 px-3 text-white rounded-lg bg-color-primary border border-color-primary hover:bg-transparent hover:text-color-primary transition"
-              onClick={handleCreateHabit}
             >
               Add
             </button>
-          </div>
+          </form>
         </div>
 
         <button

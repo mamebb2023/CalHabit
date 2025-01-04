@@ -9,7 +9,7 @@
     @apply flex justify-center items-center;
   }
   .bg-glass {
-    @apply bg-white/40 backdrop-blur-lg;
+    @apply bg-white/40 backdrop-blur-md;
   }
   .bg-glass-gradient {
     @apply bg-gradient-to-r from-white/40 via-white/30 to-white/20 backdrop-blur-lg;

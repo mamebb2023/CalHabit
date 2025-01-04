@@ -1,23 +1,29 @@
 "use client";
 
-import Title from "@/components/Title";
+import AreYouSurePrompt from "@/components/AreYouSurePrompt";
 import { days, months } from "@/constants";
 import { useToast } from "@/hooks/use-toast";
+import { useHabits } from "@/hooks/useHabits";
 import {
   getDaysForMonth,
   getLastTwoDigits,
   getUserFromToken,
 } from "@/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
-import { useParams, useRouter } from "next/navigation";
+import { Fleur_De_Leah } from "next/font/google";
+import Link from "next/link";
+import { useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
+const font = Fleur_De_Leah({ subsets: ["latin"], weight: "400" });
+
 const Page = () => {
-  const route = useRouter();
   const { toast } = useToast();
   const { habit_id: habit_id } = useParams() as {
     habit_id: string | undefined;
   };
+
+  const { habits, setUpdateTrigger } = useHabits();
 
   const [habit, setHabit] = useState<{
     _id: string;
@@ -36,18 +42,18 @@ const Page = () => {
     day: null,
   });
 
+  const [deleteHabitPrompt, setDeleteHabitPrompt] = useState(false);
+
   const currentDate = new Date();
   const currentYear = currentDate.getFullYear();
   const today = currentDate.getDate();
   const currentMonth = currentDate.getMonth();
 
-  const [updateTrigger, setUpdateTrigger] = useState(false); // State to trigger updates
-
-  const [user, setUser] = useState<{
-    _id: string;
-    name: string;
-    email: string;
-  } | null>(null);
+  // const [user, setUser] = useState<{
+  //   _id: string;
+  //   name: string;
+  //   email: string;
+  // } | null>(null);
 
   const handleDayStatusUpdate = async ({
     day,
@@ -86,8 +92,7 @@ const Page = () => {
         toast({
           title: data.message,
         });
-
-        setUpdateTrigger((prev) => !prev); // Toggle updateTrigger to refresh data
+        setUpdateTrigger((prev) => !prev);
       }
     } catch {
       console.error("Error updating day status");
@@ -115,9 +120,6 @@ const Page = () => {
         toast({
           title: data.message,
         });
-
-        // setUpdateTrigger((prev) => !prev); // Trigger habit re-fetch
-        route.push("/habits");
       }
     } catch (error) {
       console.error("Error deleting habit:", error);
@@ -130,50 +132,80 @@ const Page = () => {
   };
 
   useEffect(() => {
-    const fetchHabitsAndSelectedHabit = async () => {
-      const user = getUserFromToken();
-      if (!user) return;
+    const selectedHabit = habits.find(
+      (h: { _id: string }) => h._id === habit_id
+    );
+    setHabit(selectedHabit || null);
+  }, [habit_id, habits]);
 
-      setUser(user);
+  // useEffect(() => {
+  //   const fetchHabitsAndSelectedHabit = async () => {
+  //     const user = getUserFromToken();
+  //     if (!user) return;
 
-      try {
-        const response = await fetch(`/api/habits/get?user_id=${user._id}`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
+  //     setUser(user);
 
-        if (response.ok) {
-          const data = await response.json();
+  //     try {
+  //       const response = await fetch(`/api/habits/get?user_id=${user._id}`, {
+  //         method: "GET",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //       });
 
-          if (habit_id) {
-            const selectedHabit = data.habits.find(
-              (h: { _id: string }) => h._id === habit_id
-            );
-            setHabit(selectedHabit || null);
-          }
-        }
-      } catch (error) {
-        console.error("Error fetching habits", error);
-      }
-    };
+  //       if (response.ok) {
+  //         const data = await response.json();
 
-    fetchHabitsAndSelectedHabit();
-  }, [habit_id, updateTrigger]); // Re-fetch when habit_id or updateTrigger changes
+  //         if (habit_id) {
+  //           const selectedHabit = data.habits.find(
+  //             (h: { _id: string }) => h._id === habit_id
+  //           );
+  //           setHabit(selectedHabit || null);
+  //         }
+  //       }
+  //     } catch (error) {
+  //       console.error("Error fetching habits", error);
+  //     }
+  //   };
+
+  //   fetchHabitsAndSelectedHabit();
+  // }, [habit_id]);
 
   return (
-    <div className="p-3 flex gap-3 flex-col">
-      <Title
-        title="CalHabit"
-        currentYear={currentYear}
-        name={user?.name}
-        email={user?.email}
-        habit_name={habit?.habit_name}
-        onDeleteHabit={handleDeleteHabit} // Pass the function directly
-      />
+    <div className="p-2">
+      {/* delete habit prompt */}
+      <AnimatePresence>
+        {deleteHabitPrompt && (
+          <AreYouSurePrompt
+            title="Are you sure to delete your habit?"
+            onClose={() => setDeleteHabitPrompt(false)}
+            onDelete={() => handleDeleteHabit()}
+          />
+        )}
+      </AnimatePresence>
 
-      <div className="flex-center flex-wrap gap-5 bg-glass-gradient rounded-lg p-5">
+      {/* habits title */}
+      <div className="p-3 flex items-center justify-between bg-glass rounded-lg">
+        <div className="flex-center gap-2">
+          <Link
+            href="/habits"
+            className="p-1 hover:bg-gray-500/10 rounded-full flex-center"
+          >
+            <i className="bx bx-left-arrow-alt text-2xl cursor-pointer" />
+          </Link>
+          <p className="font-semibold">{habit && habit.habit_name}</p>
+        </div>
+        <p className={`text-xl ${font.className}`}>{currentYear}</p>
+        <div
+          className="relative hover:bg-gray-500/10 p-2 rounded-lg border border-color-primary hover:border-transparent cursor-pointer flex-center transition"
+          onClick={() => setDeleteHabitPrompt(!deleteHabitPrompt)}
+        >
+          <i className="bx bx-trash" />
+        </div>
+      </div>
+
+      {/* months calander */}
+      <div className="flex justify-center flex-wrap gap-3 p-3">
         {months.map((month, monthIndex) => {
           const adjustedMonth = monthIndex + 1; // Adjust month for one-based comparison
 

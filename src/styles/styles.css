@@ -2,6 +2,11 @@
   font-size: 1.5em;
 }
 
+.add-habit-box:hover .add-habit-circle {
+  background-color: var(--color-secondary);
+  color: rgb(255 255 255);
+}
+
 .rotate-360 {
   animation: rotate-360 infinite 7s linear;
   -moz-animation: rotate-360 infinite 7s linear;
