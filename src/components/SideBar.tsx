@@ -73,7 +73,7 @@ const SideBar = () => {
           </motion.div>
         )}
       </AnimatePresence>
-      <div className="relative flex flex-col justify-between w-full md:w-[35%] lg:[25%] bg-glass rounded-lg p-2">
+      <div className="relative flex flex-col justify-between w-full md:w-[30%] lg:w-[25%] bg-glass rounded-lg p-2">
         <div className="relative px-2 flex items-center justify-between">
           <Link href="/" className={`text-[2.7em] ${font.className}`}>
             CalHabit
