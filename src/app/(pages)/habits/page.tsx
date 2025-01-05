@@ -128,7 +128,7 @@ const Page = () => {
   };
 
   return (
-    <div className="p-2">
+    <>
       {/* add habit prompt */}
       <AnimatePresence>
         {addHabit && (
@@ -139,148 +139,149 @@ const Page = () => {
           />
         )}
       </AnimatePresence>
+      <div className="relative p-2">
+        {/* habits title */}
+        <div className="p-3 flex items-center justify-between bg-glass rounded-lg">
+          <h1 className="text-2xl font-bold">My Habits</h1>
+          <p className={`text-xl ${font.className}`}>{currentYear}</p>
+          <AddHabitBtn onClick={() => setAddHabit(true)} />
+        </div>
 
-      {/* habits title */}
-      <div className="p-3 flex items-center justify-between bg-glass rounded-lg">
-        <h1 className="text-2xl font-bold">My Habits</h1>
-        <p className={`text-xl ${font.className}`}>{currentYear}</p>
-        <AddHabitBtn onClick={() => setAddHabit(true)} />
-      </div>
+        {/* habits continer */}
+        <div className="flex justify-center md:justify-start flex-wrap gap-3 p-3">
+          {habits.map((habit, habitIndex) => (
+            <div key={habitIndex}>
+              {/* habit name */}
+              <Link
+                href={`/habits/${habit._id}`}
+                className="flex-1 flex items-center justify-between m-1 p-1 px-3 hover:bg-gray-500/10 rounded-lg transition"
+              >
+                <p className="font-bold">{habit.habit_name}</p>
+                <i className="bx bx-right-arrow-alt"></i>
+              </Link>
 
-      {/* habits continer */}
-      <div className="flex justify-center md:justify-start flex-wrap gap-3 p-3">
-        {habits.map((habit, habitIndex) => (
-          <div key={habitIndex}>
-            {/* habit name */}
-            <Link
-              href={`/habits/${habit._id}`}
-              className="flex-1 flex items-center justify-between m-1 p-1 px-3 hover:bg-gray-500/10 rounded-lg transition"
-            >
-              <p className="font-bold">{habit.habit_name}</p>
-              <i className="bx bx-right-arrow-alt"></i>
-            </Link>
+              {/* calander box */}
+              <div className="w-[300px] border border-color-primary rounded-2xl p-3">
+                <div className="flex items-center justify-between border-b border-color-secondary">
+                  <p className="font-semibold">{months[currentMonth]}</p>
+                  <p className="body-2">
+                    {currentMonth + 1}/{getLastTwoDigits(`${currentYear}`)}
+                  </p>
+                </div>
 
-            {/* calander box */}
-            <div className="w-[300px] border border-color-primary rounded-2xl p-3">
-              <div className="flex items-center justify-between border-b border-color-secondary">
-                <p className="font-semibold">{months[currentMonth]}</p>
-                <p className="body-2">
-                  {currentMonth + 1}/{getLastTwoDigits(`${currentYear}`)}
-                </p>
-              </div>
+                <div className="grid grid-cols-7 text-center font-semibold mb-1">
+                  {days.map((day) => (
+                    <div key={day} className="p-1 text-gray-600 text-[0.8em]">
+                      {day}
+                    </div>
+                  ))}
+                </div>
 
-              <div className="grid grid-cols-7 text-center font-semibold mb-1">
-                {days.map((day) => (
-                  <div key={day} className="p-1 text-gray-600 text-[0.8em]">
-                    {day}
-                  </div>
-                ))}
-              </div>
+                <div className="grid grid-cols-7 gap-1 text-center">
+                  {daysForMonth.map((day, index) => {
+                    const adjustedMonth = currentMonth + 1; // Adjust month for one-based comparison
 
-              <div className="grid grid-cols-7 gap-1 text-center">
-                {daysForMonth.map((day, index) => {
-                  const adjustedMonth = currentMonth + 1; // Adjust month for one-based comparison
+                    const habitDate = habit.dates.find(
+                      (d) =>
+                        d.date.year === currentYear &&
+                        d.date.month === adjustedMonth &&
+                        d.date.day === day
+                    );
 
-                  const habitDate = habit.dates.find(
-                    (d) =>
-                      d.date.year === currentYear &&
-                      d.date.month === adjustedMonth &&
-                      d.date.day === day
-                  );
+                    const isDone = habitDate?.status === "done";
+                    const isUndone = habitDate?.status === "undone";
+                    const isPastDate = day < today;
 
-                  const isDone = habitDate?.status === "done";
-                  const isUndone = habitDate?.status === "undone";
-                  const isPastDate = day < today;
-
-                  return (
-                    <div
-                      key={index}
-                      className={`relative flex-center p-1 border border-gray-500/30 rounded-[10px] ${
-                        day && day === today && currentMonth === currentMonth
-                          ? "bg-color-primary text-white cursor-pointer"
-                          : !isPastDate
-                          ? "cursor-not-allowed"
-                          : "text-gray-800 cursor-pointer"
-                      } ${!day && "invisible"}`}
-                      onClick={() =>
-                        day <= today &&
-                        setSelectedDay((prev) =>
-                          prev.habitIndex === habitIndex &&
-                          prev.day === day &&
-                          prev.month === currentMonth
-                            ? { habitIndex: null, day: null, month: null }
-                            : { habitIndex, day, month: currentMonth }
-                        )
-                      }
-                    >
-                      {/* done or undone */}
-                      <AnimatePresence>
-                        {selectedDay.habitIndex === habitIndex &&
-                          selectedDay.day === day && (
-                            <motion.div
-                              initial={{ y: 10, opacity: 0 }}
-                              animate={{ y: 0, opacity: 1 }}
-                              exit={{ y: 10, opacity: 0 }}
-                              className="z-[3] absolute p-1 -top-6 bg-white border rounded-full flex-center gap-1 text-color-primary"
-                            >
-                              <div
-                                className="size-6 flex-center p-1 rounded-full text-[.7em] cursor-pointer bg-green-400 hover:bg-green-500 transition text-white"
-                                onClick={() =>
-                                  handleDayStatusUpdate({
-                                    habit_id: habit._id,
-                                    day,
-                                    month: adjustedMonth,
-                                    year: currentYear,
-                                    status: "done",
-                                  })
-                                }
+                    return (
+                      <div
+                        key={index}
+                        className={`relative flex-center p-1 border border-gray-500/30 rounded-[10px] ${
+                          day && day === today && currentMonth === currentMonth
+                            ? "bg-color-primary text-white cursor-pointer"
+                            : !isPastDate
+                            ? "cursor-not-allowed"
+                            : "text-gray-800 cursor-pointer"
+                        } ${!day && "invisible"}`}
+                        onClick={() =>
+                          day <= today &&
+                          setSelectedDay((prev) =>
+                            prev.habitIndex === habitIndex &&
+                            prev.day === day &&
+                            prev.month === currentMonth
+                              ? { habitIndex: null, day: null, month: null }
+                              : { habitIndex, day, month: currentMonth }
+                          )
+                        }
+                      >
+                        {/* done or undone */}
+                        <AnimatePresence>
+                          {selectedDay.habitIndex === habitIndex &&
+                            selectedDay.day === day && (
+                              <motion.div
+                                initial={{ y: 10, opacity: 0 }}
+                                animate={{ y: 0, opacity: 1 }}
+                                exit={{ y: 10, opacity: 0 }}
+                                className="z-[3] absolute p-1 -top-6 bg-white border rounded-full flex-center gap-1 text-color-primary"
                               >
+                                <div
+                                  className="size-6 flex-center p-1 rounded-full text-[.7em] cursor-pointer bg-green-400 hover:bg-green-500 transition text-white"
+                                  onClick={() =>
+                                    handleDayStatusUpdate({
+                                      habit_id: habit._id,
+                                      day,
+                                      month: adjustedMonth,
+                                      year: currentYear,
+                                      status: "done",
+                                    })
+                                  }
+                                >
+                                  <i className="bx bx-check" />
+                                </div>
+                                <div
+                                  className="size-6 flex-center p-1 rounded-full text-[.7em] cursor-pointer bg-red-400 hover:bg-red-500 transition text-white"
+                                  onClick={() =>
+                                    handleDayStatusUpdate({
+                                      habit_id: habit._id,
+                                      day,
+                                      month: adjustedMonth,
+                                      year: currentYear,
+                                      status: "undone",
+                                    })
+                                  }
+                                >
+                                  <i className="bx bx-x" />
+                                </div>
+                              </motion.div>
+                            )}
+                        </AnimatePresence>
+                        {day}
+                        <div className="absolute -top-2 -right-2 rounded-full text-[.6em] flex-center">
+                          {habitDate ? (
+                            isDone ? (
+                              <div className="flex-center p-[1px] text-white rounded-[50%] bg-green-500">
                                 <i className="bx bx-check" />
                               </div>
-                              <div
-                                className="size-6 flex-center p-1 rounded-full text-[.7em] cursor-pointer bg-red-400 hover:bg-red-500 transition text-white"
-                                onClick={() =>
-                                  handleDayStatusUpdate({
-                                    habit_id: habit._id,
-                                    day,
-                                    month: adjustedMonth,
-                                    year: currentYear,
-                                    status: "undone",
-                                  })
-                                }
-                              >
-                                <i className="bx bx-x" />
-                              </div>
-                            </motion.div>
-                          )}
-                      </AnimatePresence>
-                      {day}
-                      <div className="absolute -top-2 -right-2 rounded-full text-[.6em] flex-center">
-                        {habitDate ? (
-                          isDone ? (
-                            <div className="flex-center p-[1px] text-white rounded-[50%] bg-green-500">
-                              <i className="bx bx-check" />
-                            </div>
-                          ) : (
-                            isUndone && (
-                              <div className="flex-center p-[1px] text-white rounded-[50%] bg-red-500">
-                                <i className="bx bx-x" />
-                              </div>
+                            ) : (
+                              isUndone && (
+                                <div className="flex-center p-[1px] text-white rounded-[50%] bg-red-500">
+                                  <i className="bx bx-x" />
+                                </div>
+                              )
                             )
-                          )
-                        ) : day > today ? (
-                          <i className="bx bx-lock opacity-70"></i>
-                        ) : null}
+                          ) : day > today ? (
+                            <i className="bx bx-lock opacity-70"></i>
+                          ) : null}
+                        </div>
                       </div>
-                    </div>
-                  );
-                })}
+                    );
+                  })}
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

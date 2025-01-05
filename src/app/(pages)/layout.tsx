@@ -19,14 +19,14 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
   }, [router]);
 
   return (
-    <div className="flex gap-3 flex-col lg:flex-row p-3 h-screen overflow-hidden">
+    <div className="flex gap-3 flex-col md:flex-row p-3 h-screen overflow-hidden">
       <SideBar />
 
       <motion.div
         key={pathname} // Use pathname as a unique key
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
-        className="flex-1 bg-glass rounded-lg overflow-y-scroll"
+        className="relative flex-1 bg-glass rounded-lg overflow-y-scroll"
       >
         {children}
       </motion.div>
