@@ -6,7 +6,7 @@ const Background = ({ children }: { children: React.ReactNode }) => {
   return (
     <div className="relative">
       <div className="fixed inset-0 h-screen flex justify-center overflow-hidden">
-        <div className="rotate-circle w-[2600px] flex items-center gap-20">
+        <div className="drotate-circle w-[2600px] flex items-center gap-20">
           {/* First Circle with Orange-Yellow Gradient */}
           <div className="rotate-360 w-[1200px] h-[1200px] rounded-full bg-gradient-to-r from-orange-600 via-yellow-400 to-orange-300"></div>
           {/* Second Circle with Cool Gradient */}

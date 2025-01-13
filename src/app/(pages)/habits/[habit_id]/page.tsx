@@ -10,18 +10,21 @@ import {
   getUserFromToken,
 } from "@/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
-import { Fleur_De_Leah } from "next/font/google";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
-const font = Fleur_De_Leah({ subsets: ["latin"], weight: "400" });
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const Page = () => {
   const { toast } = useToast();
-  const { habit_id: habit_id } = useParams() as {
-    habit_id: string | undefined;
-  };
+  const { habit_id } = useParams() as { habit_id: string | undefined };
 
   const { habits, setUpdateTrigger } = useHabits();
 
@@ -37,10 +40,7 @@ const Page = () => {
   const [selectedDay, setSelectedDay] = useState<{
     month: number | null;
     day: number | null;
-  }>({
-    month: null,
-    day: null,
-  });
+  }>({ month: null, day: null });
 
   const [deleteHabitPrompt, setDeleteHabitPrompt] = useState(false);
 
@@ -49,11 +49,7 @@ const Page = () => {
   const today = currentDate.getDate();
   const currentMonth = currentDate.getMonth();
 
-  // const [user, setUser] = useState<{
-  //   _id: string;
-  //   name: string;
-  //   email: string;
-  // } | null>(null);
+  const [selectedYear, setSelectedYear] = useState(currentYear);
 
   const handleDayStatusUpdate = async ({
     day,
@@ -89,9 +85,7 @@ const Page = () => {
       if (response.ok) {
         const data = await response.json();
 
-        toast({
-          title: data.message,
-        });
+        toast({ title: data.message });
         setUpdateTrigger((prev) => !prev);
       }
     } catch {
@@ -117,9 +111,7 @@ const Page = () => {
 
       if (response.ok) {
         const data = await response.json();
-        toast({
-          title: data.message,
-        });
+        toast({ title: data.message });
       }
     } catch (error) {
       console.error("Error deleting habit:", error);
@@ -136,55 +128,22 @@ const Page = () => {
       (h: { _id: string }) => h._id === habit_id
     );
     setHabit(selectedHabit || null);
-  }, [habit_id, habits]);
-
-  // useEffect(() => {
-  //   const fetchHabitsAndSelectedHabit = async () => {
-  //     const user = getUserFromToken();
-  //     if (!user) return;
-
-  //     setUser(user);
-
-  //     try {
-  //       const response = await fetch(`/api/habits/get?user_id=${user._id}`, {
-  //         method: "GET",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //         },
-  //       });
-
-  //       if (response.ok) {
-  //         const data = await response.json();
-
-  //         if (habit_id) {
-  //           const selectedHabit = data.habits.find(
-  //             (h: { _id: string }) => h._id === habit_id
-  //           );
-  //           setHabit(selectedHabit || null);
-  //         }
-  //       }
-  //     } catch (error) {
-  //       console.error("Error fetching habits", error);
-  //     }
-  //   };
-
-  //   fetchHabitsAndSelectedHabit();
-  // }, [habit_id]);
+  }, [habit_id, habits, selectedYear]);
 
   return (
     <div className="p-2">
-      {/* delete habit prompt */}
+      {/* Delete habit prompt */}
       <AnimatePresence>
         {deleteHabitPrompt && (
           <AreYouSurePrompt
             title="Are you sure to delete your habit?"
             onClose={() => setDeleteHabitPrompt(false)}
-            onDelete={() => handleDeleteHabit()}
+            onDelete={handleDeleteHabit}
           />
         )}
       </AnimatePresence>
 
-      {/* habits title */}
+      {/* Habits title */}
       <div className="p-3 flex items-center justify-between bg-glass rounded-lg">
         <div className="flex-center gap-2">
           <Link
@@ -195,7 +154,32 @@ const Page = () => {
           </Link>
           <p className="font-semibold">{habit && habit.habit_name}</p>
         </div>
-        <p className={`text-xl ${font.className}`}>{currentYear}</p>
+
+        <Select
+          onValueChange={(value) => {
+            const year = parseInt(value, 10);
+            setSelectedYear(year);
+            toast({ title: `Year ${year} selected!` });
+          }}
+        >
+          <SelectTrigger className="w-[150px] bg-glass p-1 rounded-lg cursor-pointer border-none">
+            <SelectValue placeholder={selectedYear} />
+          </SelectTrigger>
+          <SelectContent className="bg-glass">
+            {Array.from({ length: 10 }, (_, i) => currentYear - i).map(
+              (year) => (
+                <SelectItem
+                  key={year}
+                  value={`${year}`}
+                  className={`cursor-pointer border-none`}
+                >
+                  {year}
+                </SelectItem>
+              )
+            )}
+          </SelectContent>
+        </Select>
+
         <div
           className="relative hover:bg-gray-500/10 p-2 rounded-lg border border-color-primary hover:border-transparent cursor-pointer flex-center transition"
           onClick={() => setDeleteHabitPrompt(!deleteHabitPrompt)}
@@ -204,13 +188,12 @@ const Page = () => {
         </div>
       </div>
 
-      {/* months calander */}
+      {/* Months calendar */}
       <div className="flex justify-center flex-wrap gap-3 p-3">
         {months.map((month, monthIndex) => {
-          const adjustedMonth = monthIndex + 1; // Adjust month for one-based comparison
-
+          const adjustedMonth = monthIndex + 1;
           const daysForMonth = getDaysForMonth(
-            currentYear,
+            selectedYear,
             monthIndex
           ) as number[];
 
@@ -222,7 +205,7 @@ const Page = () => {
               <div className="relative flex items-center justify-between border-b border-color-secondary">
                 <p className="font-semibold">{month}</p>
                 <p className="body-2">
-                  {monthIndex + 1}/{getLastTwoDigits(`${currentYear}`)}
+                  {adjustedMonth}/{getLastTwoDigits(`${selectedYear}`)}
                 </p>
               </div>
 
@@ -238,7 +221,7 @@ const Page = () => {
                 {daysForMonth.map((day, index) => {
                   const habitDate = habit?.dates.find(
                     (d) =>
-                      d.date.year === currentYear &&
+                      d.date.year === selectedYear &&
                       d.date.month === adjustedMonth &&
                       d.date.day === day
                   );
@@ -246,10 +229,10 @@ const Page = () => {
                   const isDone = habitDate?.status === "done";
                   const isUndone = habitDate?.status === "undone";
                   const isPastDate =
-                    monthIndex < currentMonth || // Past month
-                    (monthIndex === currentMonth &&
-                      day !== null &&
-                      day <= today);
+                    selectedYear < currentYear ||
+                    (selectedYear === currentYear &&
+                      (monthIndex < currentMonth ||
+                        (monthIndex === currentMonth && day && day <= today)));
 
                   return (
                     <div
@@ -285,7 +268,7 @@ const Page = () => {
                                   handleDayStatusUpdate({
                                     day,
                                     month: adjustedMonth,
-                                    year: currentYear,
+                                    year: selectedYear,
                                     status: "done",
                                   })
                                 }
@@ -298,7 +281,7 @@ const Page = () => {
                                   handleDayStatusUpdate({
                                     day,
                                     month: adjustedMonth,
-                                    year: currentYear,
+                                    year: selectedYear,
                                     status: "undone",
                                   })
                                 }

@@ -63,6 +63,9 @@ const Page = () => {
               </>
             ) : (
               <>
+                <Button>
+                  <Link href="/habits">My Habits</Link>
+                </Button>
                 <div
                   className="relative hover:bg-gray-500/10 p-2 rounded-lg cursor-pointer flex-center transition"
                   onClick={() => setLogoutPrompt(!logoutPrompt)}
