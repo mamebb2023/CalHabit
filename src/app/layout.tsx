@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Lexend } from "next/font/google";
 import { Toaster } from "@/components/ui/toaster";
-import Background from "@/components/Background";
-// import Background from "@/components/Background";
+import { AuroraBackground } from "@/components/ui/aurora-background";
+import { UserProvider } from "@/context/UserContext";
 
 const font = Lexend({ subsets: ["latin"] });
 
@@ -25,9 +25,15 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body className={`${font.className} text-color-primary antialiased`}>
-        <Background>{children}</Background>
-        <Toaster />
+      <body className={`${font.className} antialiased `}>
+        <UserProvider>
+          <AuroraBackground className="text-white bg-black">
+            <div className="h-screen w-screen overflow-y-scroll z-10">
+              {children}
+            </div>
+          </AuroraBackground>
+          <Toaster />
+        </UserProvider>
       </body>
     </html>
   );

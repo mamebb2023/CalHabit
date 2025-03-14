@@ -9,20 +9,21 @@
     @apply flex justify-center items-center;
   }
   .bg-glass {
-    @apply bg-white/40 backdrop-blur-md;
+    @apply bg-white/10;
   }
   .bg-glass-gradient {
-    @apply bg-gradient-to-r from-white/40 via-white/30 to-white/20 backdrop-blur-lg;
+    @apply bg-gradient-to-r from-white/15 via-white/10 to-white/5;
   }
 }
 
 :root {
-  --color-primary: hsl(34, 100%, 10%);
-  --color-secondary: #cb7f1b;
-  --color-tertiary: #fff2b8;
+  --color-primary: hsl(200, 90%, 30%); /* Deep Blue */
+  --color-secondary: #0fa9e6; /* Bright Cyan */
+  --color-tertiary: #b3e6ff; /* Soft Pastel Cyan */
 
-  --color-primary-opacity: #33260099;
+  --color-primary-opacity: #ffffff50;
 }
+
 
 ::-webkit-scrollbar {
   width: 7px;

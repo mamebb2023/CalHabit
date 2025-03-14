@@ -1,6 +1,13 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-require-imports */
 import type { Config } from "tailwindcss";
 /** @type {import('tailwindcss').Config} */
 import plugin from "tailwindcss/plugin";
+
+const {
+  default: flattenColorPalette,
+} = require("tailwindcss/lib/util/flattenColorPalette");
+
 
 const config: Config = {
   darkMode: ["class"],
@@ -12,6 +19,19 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      animation: {
+        aurora: "aurora 60s linear infinite",
+      },
+      keyframes: {
+        aurora: {
+          from: {
+            backgroundPosition: "50% 50%, 50% 50%",
+          },
+          to: {
+            backgroundPosition: "350% 50%, 350% 50%",
+          },
+        },
+      },
       backgroundImage: {
         'custom-radial': 'radial-gradient(circle at bottom center, var(--tw-gradient-from), var(--tw-gradient-to))',
       },
@@ -24,7 +44,7 @@ const config: Config = {
       },
     },
   },
-  plugins: [
+  plugins: [addVariablesForColors,
     plugin(function ({ addBase, addComponents }) {
       addBase({});
       addComponents({
@@ -59,4 +79,16 @@ const config: Config = {
     }),
   ],
 };
+
+function addVariablesForColors({ addBase, theme }: any) {
+  const allColors = flattenColorPalette(theme("colors"));
+  const newVars = Object.fromEntries(
+    Object.entries(allColors).map(([key, val]) => [`--${key}`, val])
+  );
+ 
+  addBase({
+    ":root": newVars,
+  });
+}
+
 export default config;

@@ -1,6 +1,6 @@
 "use client";
 
-import { getUserFromToken } from "@/lib/utils";
+import { useUserContext } from "@/context/UserContext"; // Adjust the path if needed
 import { useRouter, usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import React, { useEffect } from "react";
@@ -9,14 +9,14 @@ import Link from "next/link";
 const Layout = ({ children }: { children: React.ReactNode }) => {
   const router = useRouter();
   const pathname = usePathname(); // Get the current path
+  const { user } = useUserContext(); // Access the user from context
 
   useEffect(() => {
-    const user = getUserFromToken();
-
+    // If user is already logged in, redirect to /habits
     if (user) {
       router.push("/habits");
     }
-  }, [router]);
+  }, [user, router]); // Depend on user and router to trigger on change
 
   return (
     <AnimatePresence mode="wait">
