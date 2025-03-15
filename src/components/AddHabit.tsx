@@ -26,10 +26,12 @@ const AddHabit = ({ onClose, onInputChange, handleCreateHabit }: Props) => {
       >
         <div className="bg-white p-3 rounded-xl flex flex-col gap-3">
           <div>
-            <h1 className={`h1 text-[3em] leading-[3.5rem] ${font.className}`}>
+            <h1
+              className={`bg-clip-text bg-gradient text-transparent h1 text-[3em] leading-[3.5rem] ${font.className}`}
+            >
               Add Habit
             </h1>
-            <p className="text-[.8em] text-color-secondary">
+            <p className="text-[.8em] text-black">
               Add a habit you want to track
             </p>
           </div>
@@ -41,14 +43,14 @@ const AddHabit = ({ onClose, onInputChange, handleCreateHabit }: Props) => {
             <input
               type="text"
               placeholder="Habit name"
-              className="border border-color-secondary p-1 rounded-lg mr-3"
+              className="border border-color-primary p-1 px-2 rounded-lg mr-3 bg-glass-gradient text-color-primary"
               onChange={(e) => onInputChange(e.target.value)}
             />
             <button
               type="submit"
-              className="py-1 px-3 text-white rounded-lg bg-color-primary border border-color-primary hover:bg-transparent hover:text-color-primary transition"
+              className="py-1 px-3 text-white rounded-lg bg-gradient hover:text-color-tertiary transition"
             >
-              Add
+              <i className="bx bx-cross" />
             </button>
           </form>
         </div>

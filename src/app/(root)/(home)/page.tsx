@@ -13,12 +13,12 @@ const Page = () => {
   const { user } = useUserContext();
 
   return (
-    <div className="h-[200vh]">
+    <div className="">
       <Header />
 
       <div className="py-10 flex-center flex-col gap-5">
         <h1
-          className={`text-[10em] bg-clip-text bg-gradient-to-br from-cyan-500 via-blue-500 to-indigo-500 text-transparent ${font.className} leading-[1.2]`}
+          className={`text-[10em] bg-clip-text bg-gradient text-transparent ${font.className} leading-[1.2]`}
         >
           CalHabit
         </h1>

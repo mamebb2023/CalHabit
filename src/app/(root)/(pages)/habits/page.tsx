@@ -3,13 +3,10 @@
 import AddHabit from "@/components/AddHabit";
 import AddHabitBtn from "@/components/AddHabitBtn";
 import { days, months } from "@/constants";
+import { useUserContext } from "@/context/UserContext";
 import { useToast } from "@/hooks/use-toast";
 import { useHabits } from "@/hooks/useHabits";
-import {
-  getDaysForMonth,
-  getLastTwoDigits,
-  getUserFromToken,
-} from "@/lib/utils";
+import { getDaysForMonth, getLastTwoDigits } from "@/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
 import { Fleur_De_Leah } from "next/font/google";
 import Link from "next/link";
@@ -28,6 +25,8 @@ const Page = () => {
   const currentMonth = currentDate.getMonth();
   const currentYear = currentDate.getFullYear();
   const daysForMonth = getDaysForMonth(currentYear, currentMonth) as number[];
+
+  const { user } = useUserContext();
 
   const [selectedDay, setSelectedDay] = useState<{
     month: number | null;
@@ -54,8 +53,6 @@ const Page = () => {
     year: number;
     status: "done" | "undone";
   }) => {
-    const user = getUserFromToken();
-
     if (!user) return null;
 
     try {
@@ -90,7 +87,6 @@ const Page = () => {
   const handleCreateHabit = async () => {
     setAddHabit(false);
 
-    const user = getUserFromToken();
     if (!user) return null;
 
     try {
@@ -139,10 +135,15 @@ const Page = () => {
           />
         )}
       </AnimatePresence>
+
       <div className="relative p-2">
         {/* habits title */}
         <div className="p-3 flex items-center justify-between bg-glass rounded-lg">
-          <h1 className="text-2xl font-bold">My Habits</h1>
+          <h1 className="text-2xl font-bold">
+            <span className={`bg-clip-text bg-gradient text-transparent`}>
+              My Habits
+            </span>
+          </h1>
           <p className={`text-xl ${font.className}`}>{currentYear}</p>
           <AddHabitBtn onClick={() => setAddHabit(true)} />
         </div>
@@ -171,7 +172,10 @@ const Page = () => {
 
                 <div className="grid grid-cols-7 text-center font-semibold mb-1">
                   {days.map((day) => (
-                    <div key={day} className="p-1 text-gray-600 text-[0.8em]">
+                    <div
+                      key={day}
+                      className="p-1 text-color-tertiary text-[0.8em]"
+                    >
                       {day}
                     </div>
                   ))}
@@ -191,16 +195,18 @@ const Page = () => {
                     const isDone = habitDate?.status === "done";
                     const isUndone = habitDate?.status === "undone";
                     const isPastDate = day < today;
+                    const daytoday =
+                      day && day === today && currentMonth === currentMonth;
 
                     return (
                       <div
                         key={index}
-                        className={`relative flex-center p-1 border border-gray-500/30 rounded-[10px] ${
-                          day && day === today && currentMonth === currentMonth
-                            ? "bg-color-primary text-white cursor-pointer"
-                            : !isPastDate
-                            ? "cursor-not-allowed"
-                            : "text-gray-800 cursor-pointer"
+                        className={`relative flex-center p-1 border border-gray-500/70 rounded-[10px] ${
+                          daytoday
+                            ? "bg-gradient cursor-pointer border-none"
+                            : isPastDate
+                            ? "text-color-tertiary border-color-tertiary cursor-pointer"
+                            : "text-white/50 cursor-not-allowed"
                         } ${!day && "invisible"}`}
                         onClick={() =>
                           day <= today &&
@@ -254,7 +260,9 @@ const Page = () => {
                               </motion.div>
                             )}
                         </AnimatePresence>
+
                         {day}
+
                         <div className="absolute -top-2 -right-2 rounded-full text-[.6em] flex-center">
                           {habitDate ? (
                             isDone ? (

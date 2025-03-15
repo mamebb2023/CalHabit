@@ -1,25 +1,17 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { Fleur_De_Leah } from "next/font/google";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import AreYouSurePrompt from "./AreYouSurePrompt";
-import { getUserFromToken, logout, User } from "@/lib/utils";
+import { useUserContext } from "@/context/UserContext";
 
 const font = Fleur_De_Leah({ subsets: ["latin"], weight: "400" });
 
 const SideBar = () => {
-  const route = useRouter();
-
   const [profilePrompt, setProfilePrompt] = useState(false);
   const [logoutPrompt, setLogoutPrompt] = useState(false);
+  const { user, logout } = useUserContext();
 
-  const [user, setUser] = useState<User | null>(null);
-
-  useEffect(() => {
-    const user = getUserFromToken();
-    setUser(user);
-  }, []);
   return (
     <>
       <AnimatePresence>
@@ -27,13 +19,11 @@ const SideBar = () => {
           <AreYouSurePrompt
             title="Are you sure to logout?"
             onClose={() => setLogoutPrompt(false)}
-            onDelete={() => {
-              logout();
-              route.push("/");
-            }}
+            onDelete={logout}
           />
         )}
       </AnimatePresence>
+
       {/* profile detail in <mobile */}
       <AnimatePresence>
         {profilePrompt && (
@@ -73,10 +63,13 @@ const SideBar = () => {
           </motion.div>
         )}
       </AnimatePresence>
+
       <div className="relative flex flex-col justify-between w-full md:w-[30%] lg:w-[25%] bg-glass rounded-lg p-2">
         <div className="relative px-2 flex items-center justify-between">
           <Link href="/" className={`text-[2.7em] ${font.className}`}>
-            CalHabit
+            <span className={`bg-clip-text bg-gradient text-transparent`}>
+              CalHabit
+            </span>
           </Link>
           {/* profiile icon */}
           <div className="md:hidden relative z-10">

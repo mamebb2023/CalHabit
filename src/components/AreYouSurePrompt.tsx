@@ -20,12 +20,12 @@ const AreYouSurePrompt = ({ title, onClose, onDelete }: Props) => {
         initial={{ scale: 0.9, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         exit={{ scale: 0.9, opacity: 0 }}
-        className="flex-center flex-col bg-white rounded-lg items-start gap-3 p-3"
+        className="flex-center flex-col bg-white rounded-lg items-start gap-5 p-3"
       >
-        <p className="font-semibold text-center">{title}</p>
-        <div className="flex items-center gap-2">
+        <p className="font-semibold text-center text-color-primary">{title}</p>
+        <div className="flex gap-2">
           <Button
-            className="px-1 py-1 rounded-lg"
+            className="px-2 py-1 rounded-lg"
             onClick={onClose} // Reset on Cancel
           >
             Cancel

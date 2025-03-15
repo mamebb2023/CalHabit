@@ -12,7 +12,7 @@ const Header = () => {
   return (
     <div className="px-10 md:px-20 lg:px-40 py-2 items-center flex justify-between">
       <Link href="/" className={`text-[2.5em] ${font.className}`}>
-        <span className="bg-clip-text bg-gradient-to-br from-cyan-500 via-blue-500 to-indigo-500 text-transparent">
+        <span className="bg-clip-text bg-gradient text-transparent">
           CalHabit
         </span>
       </Link>

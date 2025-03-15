@@ -14,16 +14,17 @@
   .bg-glass-gradient {
     @apply bg-gradient-to-r from-white/15 via-white/10 to-white/5;
   }
+  .bg-gradient {
+    @apply bg-gradient-to-br from-cyan-500 via-blue-500 to-indigo-500
+  }
 }
 
 :root {
-  --color-primary: hsl(200, 90%, 30%); /* Deep Blue */
+  --color-primary: rgb(44, 99, 189); /* Deep Blue */
   --color-secondary: #0fa9e6; /* Bright Cyan */
   --color-tertiary: #b3e6ff; /* Soft Pastel Cyan */
-
   --color-primary-opacity: #ffffff50;
 }
-
 
 ::-webkit-scrollbar {
   width: 7px;

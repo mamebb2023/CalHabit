@@ -25,7 +25,7 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body className={`${font.className} antialiased `}>
+      <body className={`${font.className} antialiased bg-black text-white`}>
         <UserProvider>
           <AuroraBackground className="text-white bg-black">
             <div className="h-screen w-screen overflow-y-scroll z-10">

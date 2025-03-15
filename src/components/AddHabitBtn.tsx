@@ -7,7 +7,7 @@ interface Props {
 const AddHabitBtn = ({ onClick }: Props) => {
   return (
     <div
-      className="add-habit-box p-2 flex gap-2 items-center hover:bg-gray-500/10 rounded-xl cursor-pointer transition"
+      className="add-habit-box p-2 flex gap-2 items-center bg-gradient hover:bg-gray-500/10 rounded-xl cursor-pointer transition"
       onClick={onClick}
     >
       <div className="add-habit-circle flex-center text-color-secondary border border-color-secondary rounded-full size-5 transition">

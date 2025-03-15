@@ -4,14 +4,10 @@ import AreYouSurePrompt from "@/components/AreYouSurePrompt";
 import { days, months } from "@/constants";
 import { useToast } from "@/hooks/use-toast";
 import { useHabits } from "@/hooks/useHabits";
-import {
-  getDaysForMonth,
-  getLastTwoDigits,
-  getUserFromToken,
-} from "@/lib/utils";
+import { getDaysForMonth, getLastTwoDigits } from "@/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
 import {
@@ -21,8 +17,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useUserContext } from "@/context/UserContext";
 
 const Page = () => {
+  const router = useRouter();
+  const { user } = useUserContext();
   const { toast } = useToast();
   const { habit_id } = useParams() as { habit_id: string | undefined };
 
@@ -62,8 +61,6 @@ const Page = () => {
     year: number;
     status: "done" | "undone";
   }) => {
-    const user = getUserFromToken();
-
     if (!user) return null;
 
     try {
@@ -94,8 +91,6 @@ const Page = () => {
   };
 
   const handleDeleteHabit = async () => {
-    const user = getUserFromToken();
-
     if (!user) return null;
 
     try {
@@ -112,6 +107,7 @@ const Page = () => {
       if (response.ok) {
         const data = await response.json();
         toast({ title: data.message });
+        router.push("/habits");
       }
     } catch (error) {
       console.error("Error deleting habit:", error);
@@ -162,16 +158,16 @@ const Page = () => {
             toast({ title: `Year ${year} selected!` });
           }}
         >
-          <SelectTrigger className="w-[150px] bg-glass p-1 rounded-lg cursor-pointer border-none">
+          <SelectTrigger className="w-[150px] bg-glass p-1 px-2 rounded-lg cursor-pointer border-none">
             <SelectValue placeholder={selectedYear} />
           </SelectTrigger>
-          <SelectContent className="bg-glass">
+          <SelectContent className="bg-white">
             {Array.from({ length: 10 }, (_, i) => currentYear - i).map(
               (year) => (
                 <SelectItem
                   key={year}
                   value={`${year}`}
-                  className={`cursor-pointer border-none`}
+                  className={`cursor-pointer border-none text-color-primary`}
                 >
                   {year}
                 </SelectItem>
@@ -205,13 +201,18 @@ const Page = () => {
               <div className="relative flex items-center justify-between border-b border-color-secondary">
                 <p className="font-semibold">{month}</p>
                 <p className="body-2">
-                  {adjustedMonth}/{getLastTwoDigits(`${selectedYear}`)}
+                  {adjustedMonth}
+                  <span className=""></span>/
+                  {getLastTwoDigits(`${selectedYear}`)}
                 </p>
               </div>
 
               <div className="grid grid-cols-7 text-center font-semibold mb-1">
                 {days.map((day) => (
-                  <div key={day} className="p-1 text-gray-600 text-[0.8em]">
+                  <div
+                    key={day}
+                    className="p-1 text-color-tertiary text-[0.8em]"
+                  >
                     {day}
                   </div>
                 ))}
@@ -234,15 +235,18 @@ const Page = () => {
                       (monthIndex < currentMonth ||
                         (monthIndex === currentMonth && day && day <= today)));
 
+                  const daytoday =
+                    day && day === today && monthIndex === currentMonth;
+
                   return (
                     <div
                       key={index}
                       className={`relative flex-center p-1 border border-gray-500/30 rounded-[10px] ${
-                        day && day === today && monthIndex === currentMonth
-                          ? "bg-color-primary text-white cursor-pointer"
-                          : !isPastDate
-                          ? "cursor-not-allowed opacity-80"
-                          : "text-gray-800 cursor-pointer"
+                        daytoday
+                          ? "bg-gradient cursor-pointer border-none"
+                          : isPastDate
+                          ? "text-color-tertiary border-color-tertiary cursor-pointer"
+                          : "text-white/50 cursor-not-allowed"
                       } ${!day && "invisible"}`}
                       onClick={() =>
                         isPastDate &&
