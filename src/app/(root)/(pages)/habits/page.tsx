@@ -123,6 +123,10 @@ const Page = () => {
     }
   };
 
+  if (!habits) {
+    return <div>loading...</div>;
+  }
+
   return (
     <>
       {/* add habit prompt */}
