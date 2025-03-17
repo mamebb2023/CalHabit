@@ -60,9 +60,12 @@ input::placeholder {
   100% { background-position: 0 0; }
 }
 
-.add-habit-box:hover .add-habit-circle {
-  background-color: var(--color-secondary);
+.add-habit-circle {
   color: rgb(255 255 255);
+}
+
+.add-habit-box:hover .add-habit-circle {
+  background-color: transparent;
 }
 
 .rotate-360 {

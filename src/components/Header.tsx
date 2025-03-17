@@ -30,10 +30,10 @@ const Header = () => {
             <Link href="/habits">My Habits</Link>
           </Button>
           <div
-            className="size-10 bg-white p-2 text-black border-2 border-transparent hover:border-white hover:bg-transparent rounded-full cursor-pointer active:scale-95"
+            className="flex-center size-10 bg-white p-2 rounded-full border-2 border-white cursor-pointer"
             onClick={logout}
           >
-            <i className="bx bx-log-out-circle"></i>
+            <i className="bx bx-log-out-circle bg-clip-text bg-gradient text-transparent"></i>
           </div>
         </div>
       )}

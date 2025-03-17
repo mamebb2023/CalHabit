@@ -56,7 +56,7 @@ const AddHabit = ({ onClose, onInputChange, handleCreateHabit }: Props) => {
         </div>
 
         <button
-          className="bg-white p-1 rounded-xl flex-center"
+          className="bg-white p-1 rounded-xl flex-center text-red-500"
           onClick={onClose}
         >
           <i className="bx bx-x" />
