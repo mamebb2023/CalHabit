@@ -27,11 +27,15 @@ export default function RootLayout({
       </head>
       <body className={`${font.className} antialiased bg-black text-white`}>
         <UserProvider>
-          <AuroraBackground className="text-white bg-black">
-            <div className="h-screen w-screen overflow-y-auto z-10">
+{/*           <AuroraBackground className="text-white bg-black"> */}
+          <div className="-z-1 absolute inset-0 w-full h-full>
+            <div className="absolute top-10 right-10 size-40 rounded-full bg-purple-900/50 blur-xl></div>
+            <div className="absolute bottom left-10 size-40 rounded-full bg-purple-900/50 blur-xl></div>
+          </div>
+            <div className="relative h-screen w-screen overflow-y-auto z-10">
               {children}
             </div>
-          </AuroraBackground>
+{/*           </AuroraBackground> */}
           <Toaster />
         </UserProvider>
       </body>
