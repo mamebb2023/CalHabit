@@ -27,15 +27,21 @@ export default function RootLayout({
       </head>
       <body className={`${font.className} antialiased bg-black text-white`}>
         <UserProvider>
-{/*           <AuroraBackground className="text-white bg-black"> */}
-          <div className="-z-1 absolute inset-0 w-full h-full>
-            <div className="absolute top-10 right-10 size-40 rounded-full bg-purple-900/50 blur-xl></div>
-            <div className="absolute bottom left-10 size-40 rounded-full bg-purple-900/50 blur-xl></div>
+          <div className="-z-1 absolute inset-0 w-full h-full overflow-hidden">
+            {/* Animated background elements */}
+            <div className="absolute top-10 right-10 size-40 rounded-full bg-blue-900/50 blur-xl animate-float1"></div>
+            <div className="absolute bottom-10 left-10 size-40 rounded-full bg-purple-900/50 blur-xl animate-float2"></div>
+            <div className="absolute top-1/3 left-1/4 size-60 rounded-full bg-indigo-900/30 blur-3xl animate-float3"></div>
+            <div className="absolute bottom-1/4 right-1/3 size-32 rounded-full bg-pink-900/40 blur-xl animate-float4"></div>
+            
+            {/* Subtle grid pattern in the background */}
+            <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-5"></div>
           </div>
-            <div className="relative h-screen w-screen overflow-y-auto z-10">
-              {children}
-            </div>
-{/*           </AuroraBackground> */}
+          
+          {/* Content */}
+          <div className="relative h-screen w-screen overflow-y-auto z-10">
+            {children}
+          </div>
           <Toaster />
         </UserProvider>
       </body>
