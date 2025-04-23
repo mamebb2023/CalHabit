@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Lexend } from "next/font/google";
 import { Toaster } from "@/components/ui/toaster";
-import { AuroraBackground } from "@/components/ui/aurora-background";
+// import { AuroraBackground } from "@/components/ui/aurora-background";
 import { UserProvider } from "@/context/UserContext";
 
 const font = Lexend({ subsets: ["latin"] });
@@ -33,11 +33,8 @@ export default function RootLayout({
             <div className="absolute bottom-10 left-10 size-40 rounded-full bg-purple-900/50 blur-xl animate-float2"></div>
             <div className="absolute top-1/3 left-1/4 size-60 rounded-full bg-indigo-900/30 blur-3xl animate-float3"></div>
             <div className="absolute bottom-1/4 right-1/3 size-32 rounded-full bg-pink-900/40 blur-xl animate-float4"></div>
-            
-            {/* Subtle grid pattern in the background */}
-            <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-5"></div>
           </div>
-          
+
           {/* Content */}
           <div className="relative h-screen w-screen overflow-y-auto z-10">
             {children}
