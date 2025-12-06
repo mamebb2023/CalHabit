@@ -25,17 +25,19 @@ const AreYouSurePrompt = ({ title, onClose, onDelete }: Props) => {
         <p className="font-semibold text-center text-color-primary">{title}</p>
         <div className="flex gap-2">
           <Button
-            className="px-2 py-1 rounded-lg"
+            variant="outline"
+            className="px-2 py-1"
             onClick={onClose} // Reset on Cancel
           >
             Cancel
           </Button>
-          <button
-            className="bg-transparent text-color-primary border border-color-primary py-2 px-3 rounded-lg active:scale-95 transition"
+          <Button
+            variant="primary"
+            className="px-2 py-1"
             onClick={onDelete} // Call delete function on Confirm
           >
             Confirm
-          </button>
+          </Button>
         </div>
       </motion.div>
     </motion.div>

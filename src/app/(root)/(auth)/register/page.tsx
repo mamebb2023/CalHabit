@@ -130,7 +130,7 @@ const Register = () => {
         </label>
 
         <div className="flex-center my-3">
-          <Button type="submit">Register</Button>
+          <Button type="submit" variant="primary">Register</Button>
         </div>
         <Link href="/login" className="text-[.9em] hover:underline font-[300]">
           Already have an account?{" "}

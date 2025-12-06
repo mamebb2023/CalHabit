@@ -115,7 +115,7 @@ const Page = () => {
         </label>
 
         <div className="flex-center my-3">
-          <Button type="submit">Login</Button>
+          <Button type="submit" variant="primary">Login</Button>
         </div>
 
         <Link

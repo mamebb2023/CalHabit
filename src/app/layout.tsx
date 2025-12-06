@@ -2,10 +2,9 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Lexend } from "next/font/google";
 import { Toaster } from "@/components/ui/toaster";
-import { AuroraBackground } from "@/components/ui/aurora-background";
 import { UserProvider } from "@/context/UserContext";
 
-const font = Lexend({ subsets: ["latin"] });
+const font = Lexend({ subsets: ["latin"], variable: "--font-lexend" });
 
 export const metadata: Metadata = {
   title: "CalHabit | Track my habits",
@@ -25,13 +24,11 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body className={`${font.className} antialiased bg-black text-white`}>
+      <body
+        className={`${font.className} ${font.variable} antialiased overflow-x-hidden bg-white text-gray-900`}
+      >
         <UserProvider>
-          <AuroraBackground className="text-white bg-black">
-            <div className="h-screen w-screen overflow-y-auto z-10">
-              {children}
-            </div>
-          </AuroraBackground>
+          <div className="min-h-screen bg-white">{children}</div>
           <Toaster />
         </UserProvider>
       </body>
