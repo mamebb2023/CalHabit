@@ -66,10 +66,11 @@ const SideBar = () => {
 
       <div className="relative flex flex-col justify-between w-full md:w-[30%] lg:w-[25%] bg-glass rounded-lg p-2">
         <div className="relative px-2 flex items-center justify-between">
-          <Link href="/" className={`text-[2.7em] ${font.className}`}>
-            <span className={`bg-clip-text bg-gradient text-transparent`}>
-              CalHabit
-            </span>
+          <Link
+            href="/"
+            className={`text-[2.7em] ${font.className} text-gray-900`}
+          >
+            CalHabit
           </Link>
           {/* profiile icon */}
           <div className="md:hidden relative z-10">

@@ -27,10 +27,10 @@ const Header = () => {
 
   return (
     <header
-      className={`sticky top-0 z-50 transition-all duration-300 border-b ${
+      className={`sticky top-0 z-50 transition-all duration-300 ${
         isScrolled
-          ? "backdrop-blur-sm bg-white/70 border-gray-200"
-          : "bg-transparent border-transparent"
+          ? "backdrop-blur-md bg-white/90 shadow-sm"
+          : "bg-transparent"
       }`}
     >
       <div className="px-6 md:px-12 lg:px-20 xl:px-32 py-4 items-center flex justify-between">
@@ -50,7 +50,7 @@ const Header = () => {
             <Link
               key={link.href}
               href={link.href}
-              className="text-gray-700 hover:text-gray-900 transition-colors px-3 py-2 rounded-lg hover:bg-gray-100 text-sm font-medium"
+              className="text-gray-700 hover:text-black transition-colors px-3 py-2 rounded-lg text-sm font-medium"
             >
               {link.label}
             </Link>

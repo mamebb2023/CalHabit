@@ -1,6 +1,7 @@
 input::placeholder {
-  color: white;
-  opacity: 0.5;
+  color: rgb(156 163 175);
+  /* gray-400 */
+  opacity: 1;
 }
 
 .bx {
@@ -55,9 +56,17 @@ input::placeholder {
 }
 
 @keyframes glowing {
-  0% { background-position: 0 0; }
-  50% { background-position: 400% 0; }
-  100% { background-position: 0 0; }
+  0% {
+    background-position: 0 0;
+  }
+
+  50% {
+    background-position: 400% 0;
+  }
+
+  100% {
+    background-position: 0 0;
+  }
 }
 
 .add-habit-circle {
@@ -79,6 +88,7 @@ input::placeholder {
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
@@ -95,6 +105,7 @@ input::placeholder {
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }

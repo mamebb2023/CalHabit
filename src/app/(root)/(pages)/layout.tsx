@@ -20,7 +20,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
     <div className="flex gap-3 flex-col md:flex-row p-3 h-screen overflow-hidden">
       <SideBar />
 
-      <div className="relative flex-1 bg-glass rounded-lg overflow-y-scroll">
+      <div className="relative flex-1 rounded-lg overflow-y-scroll">
         {children}
       </div>
     </div>

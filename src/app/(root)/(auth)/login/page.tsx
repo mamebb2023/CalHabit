@@ -9,6 +9,7 @@ import { useToast } from "@/hooks/use-toast";
 import { getUserFromToken, validateEmail, validatePassword } from "@/lib/utils";
 import Link from "next/link";
 import { Fleur_De_Leah } from "next/font/google";
+import { Eye, EyeOff, Lock, Mail } from "lucide-react";
 
 const font = Fleur_De_Leah({
   subsets: ["latin"],
@@ -23,9 +24,11 @@ const Page = () => {
 
   const [error, setError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (isSubmitting) return;
 
     const email = emailRef.current?.value || "";
     const password = passwordRef.current?.value || "";
@@ -42,6 +45,7 @@ const Page = () => {
 
     // Handle successful login logic here
     try {
+      setIsSubmitting(true);
       const res = await fetch("/api/auth/login", {
         method: "POST",
         headers: {
@@ -74,15 +78,25 @@ const Page = () => {
       }
     } catch (err) {
       setError("An error occurred. Please try again.");
-      throw err;
+      console.error(err);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   return (
-    <div className="p-7 flex gap-5 flex-col w-[90%] lg:w-[400px] bg-glass-gradient rounded-3xl">
-      <h1 className={`h1 text-[3em] leading-[3.5rem] ${font.className}`}>
-        Login
-      </h1>
+    <div className="relative w-[92%] max-w-[420px] rounded-3xl border border-gray-200 bg-white p-8 shadow-xl">
+      <div className="absolute inset-x-80 top-0 h-px bg-gradient-to-r from-transparent via-cyan-400/60 to-transparent" />
+
+      <div className="mb-6">
+        <h1 className={`h1 text-[3em] leading-[3.5rem] ${font.className}`}>
+          Login
+        </h1>
+        <p className="mt-1 text-sm text-gray-600">
+          Welcome back — let’s get you into your dashboard.
+        </p>
+      </div>
+
       <AnimatePresence mode="wait">
         {error && (
           <motion.p
@@ -97,34 +111,54 @@ const Page = () => {
       </AnimatePresence>
 
       <form onSubmit={handleLogin} className="flex flex-col gap-3 w-full">
-        <Input type="text" placeholder="Email" ref={emailRef} />
+        <Input
+          type="email"
+          label="Email"
+          placeholder="you@example.com"
+          autoComplete="email"
+          ref={emailRef}
+          leftIcon={<Mail className="size-4" />}
+        />
         <Input
           type={!showPassword ? "password" : "text"}
-          placeholder="Password"
+          label="Password"
+          placeholder="••••••••"
+          autoComplete="current-password"
           ref={passwordRef}
+          leftIcon={<Lock className="size-4" />}
+          rightElement={
+            <button
+              type="button"
+              onClick={() => setShowPassword((v) => !v)}
+              className="rounded-lg p-1 text-gray-600 hover:text-black transition-colors"
+              aria-label={showPassword ? "Hide password" : "Show password"}
+            >
+              {showPassword ? (
+                <EyeOff className="size-4" />
+              ) : (
+                <Eye className="size-4" />
+              )}
+            </button>
+          }
         />
 
-        <label className="flex items-center gap-1 justify-end text-sm cursor-pointer">
-          <input
-            type="checkbox"
-            checked={showPassword}
-            onChange={() => setShowPassword(!showPassword)}
-            className="form-checkbox text-primary"
-          />
-          <span>Show Password</span>
-        </label>
-
-        <div className="flex-center my-3">
-          <Button type="submit" variant="primary">Login</Button>
+        <div className="flex-center mt-4">
+          <Button
+            type="submit"
+            variant="primary"
+            className="w-full py-3"
+            isLoading={isSubmitting}
+          >
+            Login
+          </Button>
         </div>
 
-        <Link
-          href="/register"
-          className="text-[.9em] hover:underline font-[300]"
-        >
+        <p className="text-sm text-gray-600 text-center mt-2">
           Don&apos;t have an account?{" "}
-          <span className="font-normal">Register here</span>
-        </Link>
+          <Link href="/register" className="text-black hover:underline">
+            Register here
+          </Link>
+        </p>
       </form>
     </div>
   );

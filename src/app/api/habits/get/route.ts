@@ -19,10 +19,8 @@ export async function GET(req: NextRequest) {
     const habits = await Habit.find({ user_id });
 
     if (habits.length === 0) {
-      return NextResponse.json(
-        { message: "No habits found for this user" },
-        { status: 404 }
-      );
+      // For a new user with no habits yet, return an empty list with 200
+      return NextResponse.json({ habits: [] }, { status: 200 });
     }
 
     return NextResponse.json({ habits });

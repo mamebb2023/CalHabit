@@ -9,6 +9,7 @@ import { useToast } from "@/hooks/use-toast";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Fleur_De_Leah } from "next/font/google";
+import { Eye, EyeOff, Lock, Mail, User } from "lucide-react";
 
 const font = Fleur_De_Leah({
   subsets: ["latin"],
@@ -26,9 +27,11 @@ const Register = () => {
 
   const [error, setError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (isSubmitting) return;
 
     const name = nameRef.current?.value || "";
     const email = emailRef.current?.value || "";
@@ -59,6 +62,7 @@ const Register = () => {
 
     // Handle successful registration logic here
     try {
+      setIsSubmitting(true);
       const res = await fetch("/api/auth/register", {
         method: "POST",
         headers: {
@@ -84,14 +88,24 @@ const Register = () => {
     } catch (error) {
       setError("An error occurred. Please try again.");
       console.error(error);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   return (
-    <div className="p-7 flex gap-3 flex-col w-[90%] lg:w-[400px] bg-glass-gradient rounded-3xl">
-      <h1 className={`h1 text-[3em] leading-[3.5rem] ${font.className}`}>
-        Register
-      </h1>
+    <div className="relative w-[92%] max-w-[420px] rounded-3xl border border-gray-200 bg-white p-8 shadow-xl">
+      <div className="absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-cyan-400/60 to-transparent" />
+
+      <div className="mb-6">
+        <h1 className={`h1 text-[3em] leading-[3.5rem] ${font.className}`}>
+          Register
+        </h1>
+        <p className="mt-1 text-sm text-gray-600">
+          Create your account in under a minute.
+        </p>
+      </div>
+
       <AnimatePresence mode="wait">
         {error && (
           <motion.p
@@ -107,35 +121,70 @@ const Register = () => {
       </AnimatePresence>
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-3 w-full">
-        <Input type="text" placeholder="Your Name" ref={nameRef} />
-        <Input type="text" placeholder="Email" ref={emailRef} />
+        <Input
+          type="text"
+          label="Name"
+          placeholder="Your name"
+          autoComplete="name"
+          ref={nameRef}
+          leftIcon={<User className="size-4" />}
+        />
+        <Input
+          type="email"
+          label="Email"
+          placeholder="you@example.com"
+          autoComplete="email"
+          ref={emailRef}
+          leftIcon={<Mail className="size-4" />}
+        />
         <Input
           type={showPassword ? "text" : "password"}
-          placeholder="Password"
+          label="Password"
+          placeholder="••••••••"
+          autoComplete="new-password"
           ref={passwordRef}
+          leftIcon={<Lock className="size-4" />}
+          rightElement={
+            <button
+              type="button"
+              onClick={() => setShowPassword((v) => !v)}
+              className="rounded-lg p-1 text-gray-600 hover:text-black transition-colors"
+              aria-label={showPassword ? "Hide passwords" : "Show passwords"}
+            >
+              {showPassword ? (
+                <EyeOff className="size-4" />
+              ) : (
+                <Eye className="size-4" />
+              )}
+            </button>
+          }
         />
         <Input
           type={showPassword ? "text" : "password"}
-          placeholder="Confirm Password"
+          label="Confirm password"
+          placeholder="••••••••"
+          autoComplete="new-password"
           ref={confirmPasswordRef}
+          leftIcon={<Lock className="size-4" />}
         />
 
-        <label className="flex items-center gap-1 justify-end text-sm cursor-pointer">
-          <input
-            type="checkbox"
-            checked={showPassword}
-            onChange={() => setShowPassword(!showPassword)}
-          />
-          <span>Show Password</span>
-        </label>
-
-        <div className="flex-center my-3">
-          <Button type="submit" variant="primary">Register</Button>
+        <div className="flex-center mt-4">
+          <Button
+            type="submit"
+            variant="primary"
+            className="w-full py-3"
+            isLoading={isSubmitting}
+          >
+            Create account
+          </Button>
         </div>
-        <Link href="/login" className="text-[.9em] hover:underline font-[300]">
+
+        <p className="text-sm text-gray-600 text-center mt-2">
           Already have an account?{" "}
-          <span className="font-normal">Login here</span>
-        </Link>
+          <Link href="/login" className="text-black hover:underline">
+            Login here
+          </Link>
+        </p>
       </form>
     </div>
   );
