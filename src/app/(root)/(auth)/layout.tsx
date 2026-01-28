@@ -24,7 +24,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
         key={pathname} // Unique key for animations on route change
         initial={{ opacity: 0, scale: 0.95 }} // Start with lower opacity and translateY
         animate={{ opacity: 1, scale: 1 }} // Animate to full opacity and original position
-        className="h-screen flex-center flex-col"
+        className="h-screen w-full flex-center flex-col bg-gradient-to-b from-transparent via-transparent to-indigo-200 px-4"
       >
         <Link
           href="/"
