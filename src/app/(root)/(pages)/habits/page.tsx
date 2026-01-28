@@ -147,7 +147,7 @@ const Page = () => {
         {/* habits container */}
         <div className="flex justify-center md:justify-start flex-wrap gap-3 p-3">
           {habits.length === 0 ? (
-            <div className="w-full py-16 flex flex-col items-center justify-center text-center rounded-2xl border border-dashed border-gray-300 bg-gray-50">
+            <div className="w-full py-16 h-full flex flex-col items-center justify-center text-center rounded-2xl border border-dashed border-gray-300/80 bg-gray-50/80">
               <p className="text-lg font-semibold text-gray-900">
                 You don&apos;t have any habits yet
               </p>

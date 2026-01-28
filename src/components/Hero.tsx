@@ -59,8 +59,7 @@ const Hero = () => {
           </div>
 
           <p className="text-lg md:text-xl text-gray-700 max-w-3xl leading-relaxed">
-            We&apos;re here to simplify the intricacies of your life, providing
-            a user-friendly platform to keep track of your habits.
+            We&apos;re here to simplify your daily life by providing a clean, user-friendly platform that helps you easily track, manage, and build better habits over time.
           </p>
 
           <div className="flex flex-col items-center gap-6 mt-4">

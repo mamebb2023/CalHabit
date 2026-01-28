@@ -1,6 +1,7 @@
 "use client";
 
 import SideBar from "@/components/SideBar";
+import { AuroraBackground } from "@/components/ui/aurora-background";
 import { useUserContext } from "@/context/UserContext";
 import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";
@@ -17,13 +18,16 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
   }, [router, user]);
 
   return (
-    <div className="flex gap-3 flex-col md:flex-row p-3 h-screen overflow-hidden">
-      <SideBar />
+    <AuroraBackground>
+      <div className="flex gap-3 flex-col md:flex-row p-3 h-screen overflow-hidden bg-gradient-to-b from-transparent via-transparent to-indigo-200">
 
-      <div className="relative flex-1 rounded-lg overflow-y-scroll">
-        {children}
+        <SideBar />
+
+        <div className="relative flex-1 rounded-lg overflow-y-scroll">
+          {children}
+        </div>
       </div>
-    </div>
+    </AuroraBackground>
   );
 };
 

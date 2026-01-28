@@ -3,16 +3,16 @@ import { useEffect, useState } from "react";
 
 export const useHabits = () => {
   const [habits, setHabits] = useState<
-      {
-        _id: string; // habit id
-        user_id: string;
-        habit_name: string;
-        dates: {
-          date: { year: number | null; month: number | null; day: number | null };
-          status: "done" | "undone";
-        }[];
-      }[]
-    >([]);
+    {
+      _id: string; // habit id
+      user_id: string;
+      habit_name: string;
+      dates: {
+        date: { year: number | null; month: number | null; day: number | null };
+        status: "done" | "undone";
+      }[];
+    }[]
+  >([]);
 
   const [updateTrigger, setUpdateTrigger] = useState(false);
 
@@ -42,7 +42,7 @@ export const useHabits = () => {
       }
     };
 
-    if (updateTrigger || habits.length === 0) {
+    if (updateTrigger) {
       fetchUserAndHabits();
     }
   }, [updateTrigger, habits]);
