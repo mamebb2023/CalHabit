@@ -42,9 +42,7 @@ export const useHabits = () => {
       }
     };
 
-    if (updateTrigger) {
-      fetchUserAndHabits();
-    }
+    fetchUserAndHabits();
   }, [updateTrigger, habits]);
 
   return { habits, setHabits, setUpdateTrigger };

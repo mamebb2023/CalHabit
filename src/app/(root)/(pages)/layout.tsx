@@ -19,8 +19,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <AuroraBackground>
-      <div className="flex gap-3 flex-col md:flex-row p-3 h-screen overflow-hidden bg-gradient-to-b from-transparent via-transparent to-indigo-200">
-
+      <div className="flex gap-3 flex-col md:flex-row p-3 h-screen overflow-hidden">
         <SideBar />
 
         <div className="relative flex-1 rounded-lg overflow-y-scroll">
