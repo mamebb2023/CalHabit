@@ -240,7 +240,7 @@ const Page = () => {
                                   initial={{ y: 10, opacity: 0 }}
                                   animate={{ y: 0, opacity: 1 }}
                                   exit={{ y: 10, opacity: 0 }}
-                                  className="z-[3] absolute p-1 -top-6 bg-white border rounded-full flex-center gap-1 text-color-primary"
+                                  className="z-[3] absolute p-1 -top-6 bg-white border rounded-full flex-center gap-1 text-white"
                                 >
                                   <div
                                     className="size-6 flex-center p-1 rounded-full text-[.7em] cursor-pointer bg-green-400 hover:bg-green-500 transition "
@@ -276,7 +276,7 @@ const Page = () => {
 
                           {day}
 
-                          <div className="absolute -top-2 -right-2 rounded-full text-[.6em] flex-center">
+                          <div className="absolute -top-2 -right-2 text-white rounded-full text-[.6em] flex-center">
                             {habitDate ? (
                               isDone ? (
                                 <div className="flex-center p-[1px]  rounded-[50%] bg-green-500">
