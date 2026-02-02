@@ -256,6 +256,7 @@ const Page = () => {
                                   >
                                     <i className="bx bx-check" />
                                   </div>
+                                  
                                   <div
                                     className="size-6 flex-center p-1 rounded-full text-[.7em] cursor-pointer bg-red-400 hover:bg-red-500 transition "
                                     onClick={() =>
@@ -290,7 +291,7 @@ const Page = () => {
                                 )
                               )
                             ) : day > today ? (
-                              <i className="bx bx-lock opacity-70"></i>
+                              <i className="bx bx-lock opacity-70 text-color-tertiary"></i>
                             ) : null}
                           </div>
                         </div>
